@@ -53,10 +53,16 @@
         .modal-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 10px; padding-right: 40px; }
         .modal-company { color: var(--primary-color); font-weight: 600; margin-bottom: 15px; font-size: 1.05rem; }
         .modal-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 25px; padding-bottom: 25px; border-bottom: 1px solid #e2e8f0; }
-        .modal-description { font-size: 0.95rem; line-height: 1.7; color: #475569; margin-bottom: 30px; }
-        .modal-description p { margin-bottom: 15px; }
-        .modal-description ul, .modal-description ol { margin-left: 20px; margin-bottom: 15px; }
+        
+        /* NEW: Better styling for the description to give it spaces and sections */
+        .modal-description { font-size: 0.95rem; line-height: 1.8; color: #334155; margin-bottom: 30px; white-space: pre-wrap; word-wrap: break-word; }
+        .modal-description p { margin-bottom: 16px; }
+        .modal-description ul, .modal-description ol { margin-bottom: 16px; padding-left: 20px; }
         .modal-description li { margin-bottom: 8px; }
+        .modal-description h1, .modal-description h2, .modal-description h3, .modal-description h4 { margin-top: 24px; margin-bottom: 12px; font-weight: 700; color: #0f172a; line-height: 1.4; }
+        .modal-description h2 { font-size: 1.25rem; }
+        .modal-description h3 { font-size: 1.1rem; }
+        .modal-description strong { font-weight: 700; color: #0f172a; }
         
         .modal-apply-btn { display: block; background: var(--primary-color); color: var(--white); padding: 15px 30px; text-decoration: none; border-radius: 12px; text-align: center; font-weight: 700; font-size: 1.05rem; transition: background 0.3s ease; width: 100%; }
         .modal-apply-btn:hover { background: var(--accent-color); }
@@ -115,6 +121,7 @@
 
     <script>
         const SUPABASE_URL = 'https://xsuqoebwpuxnhjpjzysv.supabase.co';
+        // 🚨 PASTE YOUR FULL ANON KEY BELOW 🚨
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzdXFvZWJ3cHV4bmhqcGp6eXN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk1OTg4NjQsImV4cCI6MjEwNTE3NDg2NH0.fVRP2mQU_yExjbTvUJzbsHCTQnIa2JBUJcidozSIxCQ';
 
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -126,12 +133,7 @@
             allJobs = data; document.getElementById('loading').style.display = 'none'; renderJobs(allJobs);
         }
 
-        function stripHtml(html) {
-            if (!html) return 'No description available.';
-            const tmp = document.createElement('div');
-            tmp.innerHTML = html;
-            return tmp.textContent || tmp.innerText || 'No description available.';
-        }
+        // ❌ REMOVED THE stripHtml FUNCTION. We are now keeping the HTML for proper formatting.
 
         function renderJobs(jobs) {
             const container = document.getElementById('jobsContainer'); container.innerHTML = '';
@@ -165,7 +167,10 @@
                 ${job.salary && job.salary !== 'Not specified' ? `<span class="job-tag job-salary">💰 ${job.salary}</span>` : ''}
                 ${job.source ? `<span class="job-tag">Source: ${job.source}</span>` : ''}
             `;
-            document.getElementById('modalDescription').textContent = stripHtml(job.description);
+            
+            // ✅ CHANGED: We use innerHTML to KEEP the formatting (paragraphs, bullet points, etc.)
+            document.getElementById('modalDescription').innerHTML = job.description || 'No description available.';
+            
             document.getElementById('modalApplyBtn').href = job.apply_url || '#';
             document.getElementById('jobModal').classList.add('active');
             document.body.style.overflow = 'hidden';
