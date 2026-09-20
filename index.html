@@ -172,6 +172,7 @@
             document.getElementById('modalDescription').innerHTML = job.description || 'No description available.';
             
             document.getElementById('modalApplyBtn').href = job.apply_url || '#';
+            document.querySelector('.modal-content').scrollTop = 0;
             document.getElementById('jobModal').classList.add('active');
             document.body.style.overflow = 'hidden';
         }
