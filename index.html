@@ -333,7 +333,14 @@
                 });
                 const data = await response.json();
                 if (data.error) {
-                    result.innerHTML = `<p style="color:red;">Error: ${data.error}</p>`;
+                                        console.error('AI Error Details:', data.details || data.error);
+                    result.innerHTML = `
+                        <div style="text-align:center; padding:20px;">
+                            <p style="font-size:2rem; margin-bottom:10px;">😴</p>
+                            <p style="color:#64748b; font-weight:600; margin-bottom:5px;">AI is taking a short break</p>
+                            <p style="color:#94a3b8; font-size:0.85rem;">Please try again in a few moments.</p>
+                        </div>
+                    `;
                 } else {
                     result.innerHTML = `
                         <div class="match-score">${data.matchScore}% Match</div>
