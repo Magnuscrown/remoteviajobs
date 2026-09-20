@@ -17,24 +17,50 @@
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-dark); line-height: 1.6; }
+        
         .hero { background: linear-gradient(135deg, var(--primary-color) 0%, #1e4b7a 100%); color: var(--white); padding: 60px 20px 80px 20px; text-align: center; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; margin-bottom: 40px; }
         .hero h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 10px; letter-spacing: 1px; }
         .hero p { font-size: 1.1rem; opacity: 0.9; margin-bottom: 30px; }
         .search-box { max-width: 600px; margin: 0 auto; position: relative; }
         .search-box input { width: 100%; padding: 18px 25px; border-radius: 50px; border: none; font-size: 1rem; font-family: 'Inter', sans-serif; box-shadow: 0 10px 25px rgba(0,0,0,0.1); outline: none; transition: box-shadow 0.3s ease; }
         .search-box input:focus { box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        
         .jobs-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; max-width: 1200px; margin: 0 auto; padding: 0 20px 60px 20px; }
-        .job-card { background: var(--white); padding: 25px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        
+        .job-card { background: var(--white); padding: 25px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s ease, box-shadow 0.2s ease; cursor: pointer; }
         .job-card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+        
         .job-title { font-size: 1.15rem; font-weight: 700; color: var(--text-dark); margin-bottom: 8px; line-height: 1.3; }
         .job-company { font-size: 0.95rem; font-weight: 500; color: var(--primary-color); margin-bottom: 12px; }
         .job-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
         .job-tag { background: #f1f5f9; color: var(--text-light); font-size: 0.8rem; padding: 4px 10px; border-radius: 20px; font-weight: 500; display: inline-flex; align-items: center; gap: 5px; }
         .job-salary { color: #10b981; font-weight: 600; font-size: 0.9rem; }
-        .apply-btn { display: block; background: var(--primary-color); color: var(--white); padding: 12px 20px; text-decoration: none; border-radius: 10px; text-align: center; font-weight: 600; font-size: 0.95rem; transition: background 0.3s ease, transform 0.1s ease; margin-top: auto; }
-        .apply-btn:hover { background: var(--accent-color); }
-        .apply-btn:active { transform: scale(0.98); }
+        
+        .view-details-btn { display: block; background: var(--primary-color); color: var(--white); padding: 12px 20px; text-decoration: none; border-radius: 10px; text-align: center; font-weight: 600; font-size: 0.95rem; transition: background 0.3s ease; margin-top: auto; border: none; cursor: pointer; width: 100%; font-family: 'Inter', sans-serif; }
+        .view-details-btn:hover { background: var(--accent-color); }
+        
         .loading { text-align: center; font-size: 1.2rem; color: var(--text-light); padding: 40px; grid-column: 1 / -1; }
+        
+        /* MODAL STYLES */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(5px); z-index: 1000; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; }
+        .modal-overlay.active { display: flex; }
+        .modal-content { background: var(--white); border-radius: 20px; max-width: 700px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 35px; position: relative; animation: slideUp 0.3s ease; }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        
+        .modal-close { position: absolute; top: 15px; right: 15px; background: #f1f5f9; border: none; width: 40px; height: 40px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; color: var(--text-dark); transition: background 0.2s; }
+        .modal-close:hover { background: #e2e8f0; }
+        
+        .modal-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 10px; padding-right: 40px; }
+        .modal-company { color: var(--primary-color); font-weight: 600; margin-bottom: 15px; font-size: 1.05rem; }
+        .modal-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 25px; padding-bottom: 25px; border-bottom: 1px solid #e2e8f0; }
+        .modal-description { font-size: 0.95rem; line-height: 1.7; color: #475569; margin-bottom: 30px; }
+        .modal-description p { margin-bottom: 15px; }
+        .modal-description ul, .modal-description ol { margin-left: 20px; margin-bottom: 15px; }
+        .modal-description li { margin-bottom: 8px; }
+        
+        .modal-apply-btn { display: block; background: var(--primary-color); color: var(--white); padding: 15px 30px; text-decoration: none; border-radius: 12px; text-align: center; font-weight: 700; font-size: 1.05rem; transition: background 0.3s ease; width: 100%; }
+        .modal-apply-btn:hover { background: var(--accent-color); }
+        
         footer { background: #0f172a; color: #94a3b8; padding: 50px 20px 30px 20px; text-align: center; border-top: 1px solid #1e293b; }
         .footer-logo { font-size: 1.5rem; font-weight: 700; color: var(--white); margin-bottom: 15px; letter-spacing: 2px; }
         .footer-tagline { font-size: 0.95rem; margin-bottom: 25px; color: #cbd5e1; }
@@ -43,10 +69,12 @@
         .footer-links a:hover { color: var(--white); }
         .footer-founder { font-size: 0.9rem; color: #94a3b8; border-top: 1px solid #1e293b; padding-top: 20px; max-width: 400px; margin: 0 auto; }
         .footer-founder strong { color: var(--white); font-weight: 600; }
-        @media (max-width: 600px) { .hero h1 { font-size: 1.8rem; } .hero p { font-size: 1rem; } .jobs-container { grid-template-columns: 1fr; } }
+        
+        @media (max-width: 600px) { .hero h1 { font-size: 1.8rem; } .hero p { font-size: 1rem; } .jobs-container { grid-template-columns: 1fr; } .modal-content { padding: 25px; } .modal-title { font-size: 1.25rem; } }
     </style>
 </head>
 <body>
+
     <header class="hero">
         <h1 style="font-size: 2rem; margin-bottom: 15px;">Remote Via Jobs</h1>
         <p>Find Remote Jobs Worldwide</p>
@@ -57,6 +85,18 @@
 
     <div id="loading" class="loading">Loading jobs...</div>
     <div class="jobs-container" id="jobsContainer"></div>
+
+    <!-- MODAL -->
+    <div class="modal-overlay" id="jobModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <h2 class="modal-title" id="modalTitle"></h2>
+            <p class="modal-company" id="modalCompany"></p>
+            <div class="modal-meta" id="modalMeta"></div>
+            <div class="modal-description" id="modalDescription"></div>
+            <a href="#" target="_blank" class="modal-apply-btn" id="modalApplyBtn">Apply Now</a>
+        </div>
+    </div>
 
     <footer>
         <div class="footer-logo">R V J</div>
@@ -74,9 +114,8 @@
     </footer>
 
     <script>
-        // 🚨 PASTE YOUR SUPABASE ANON KEY BELOW 🚨
         const SUPABASE_URL = 'https://xsuqoebwpuxnhjpjzysv.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzdXFvZWJ3cHV4bmhqcGp6eXN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk1OTg4NjQsImV4cCI6MjEwNTE3NDg2NH0.fVRP2mQU_yExjbTvUJzbsHCTQnIa2JBUJcidozSIxCQ';
+        const SUPABASE_ANON_KEY = 'PASTE_YOUR_FULL_ANON_KEY_HERE';
 
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         let allJobs = [];
@@ -87,10 +126,17 @@
             allJobs = data; document.getElementById('loading').style.display = 'none'; renderJobs(allJobs);
         }
 
+        function stripHtml(html) {
+            if (!html) return 'No description available.';
+            const tmp = document.createElement('div');
+            tmp.innerHTML = html;
+            return tmp.textContent || tmp.innerText || 'No description available.';
+        }
+
         function renderJobs(jobs) {
             const container = document.getElementById('jobsContainer'); container.innerHTML = '';
             if (jobs.length === 0) { container.innerHTML = '<p style="text-align:center; grid-column: 1/-1;">No jobs found.</p>'; return; }
-            jobs.forEach(job => {
+            jobs.forEach((job, index) => {
                 const card = document.createElement('div'); card.className = 'job-card';
                 const location = job.location || 'Remote';
                 const salary = job.salary && job.salary !== 'Not specified' ? job.salary : null;
@@ -103,11 +149,40 @@
                             ${salary ? `<span class="job-tag job-salary">💰 ${salary}</span>` : ''}
                         </div>
                     </div>
-                    <a href="${job.apply_url}" target="_blank" class="apply-btn">View & Apply</a>
+                    <button class="view-details-btn" onclick="openModal(${index})">View Details</button>
                 `;
                 container.appendChild(card);
             });
         }
+
+        function openModal(index) {
+            const job = allJobs[index];
+            if (!job) return;
+            document.getElementById('modalTitle').textContent = job.title || 'Untitled Job';
+            document.getElementById('modalCompany').textContent = job.company || 'Unknown Company';
+            document.getElementById('modalMeta').innerHTML = `
+                <span class="job-tag">📍 ${job.location || 'Remote'}</span>
+                ${job.salary && job.salary !== 'Not specified' ? `<span class="job-tag job-salary">💰 ${job.salary}</span>` : ''}
+                ${job.source ? `<span class="job-tag">Source: ${job.source}</span>` : ''}
+            `;
+            document.getElementById('modalDescription').textContent = stripHtml(job.description);
+            document.getElementById('modalApplyBtn').href = job.apply_url || '#';
+            document.getElementById('jobModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('jobModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        document.getElementById('jobModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeModal();
+        });
 
         function filterJobs() {
             const query = document.getElementById('searchInput').value.toLowerCase();
