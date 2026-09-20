@@ -9,26 +9,37 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Missing job description or CV' });
   }
 
-  const prompt = `You are an ATS (Applicant Tracking System) expert. Analyze the following job description and the user's CV.
+  const prompt = `You are an expert ATS (Applicant Tracking System) and career coach.
+
+Analyze the JOB DESCRIPTION and the USER'S CV below, then return a detailed, personalized analysis.
 
 JOB DESCRIPTION:
-${jobDescription.substring(0, 3000)}
+${jobDescription.substring(0, 3500)}
 
 USER'S CV:
-${userCV.substring(0, 3000)}
+${userCV.substring(0, 3500)}
 
-Return ONLY a valid JSON object with this exact structure (no markdown, no extra text):
+Return ONLY a valid JSON object with this EXACT structure (no markdown, no extra text):
+
 {
-  "matchScore": <number between 0 and 100>,
-  "topKeywords": [<array of 10-15 most important ATS keywords from the job description>],
-  "matchedKeywords": [<array of keywords from the job that ARE in the user's CV>],
-  "missingKeywords": [<array of important keywords from the job that are NOT in the user's CV>],
-  "summary": "<one sentence summary of the match>"
+  "matchScore": <number 0-100>,
+  "summary": "<2-3 sentences addressed directly to the user. Use 'Your CV...' NOT 'The user's CV...'. Be encouraging but honest. Explain the match level and the biggest opportunity for improvement.>",
+  "yearsExperience": {
+    "detected": "<approximate years of experience detected in the CV, e.g. '3 years' or 'Not clearly stated'>",
+    "required": "<years of experience required by the job, e.g. '5+ years' or 'Not specified'>",
+    "verdict": "<one short sentence comparing them, e.g. 'Your experience is close to what they want.' or 'This role wants 2 more years than you have.'>"
+  },
+  "whyItFits": ["<3-5 bullet points of strengths from the CV that match the job>"],
+  "whyItDoesntFit": ["<3-5 bullet points of gaps — skills, experience, or keywords the job wants but the CV lacks>"],
+  "topSkills": ["<3-5 top skills from the CV that are most relevant to this job>"],
+  "matchedKeywords": ["<10-15 ATS keywords that appear in BOTH the job and the CV>"],
+  "missingKeywords": ["<10-15 important ATS keywords from the job that are NOT in the CV>"],
+  "recommendation": "<one actionable sentence telling the user the next best step, e.g. 'Add Financial Technology and Product Strategy to your CV and highlight your 3 years of customer support experience.'>"
 }`;
 
   const errors = [];
 
-  // 1. Try Gemini (UPDATED MODEL NAME)
+  // 1. Try Gemini
   try {
     const geminiKey = process.env.GEMINI_API_KEY;
     if (!geminiKey) throw new Error('GEMINI_API_KEY not set');
@@ -42,7 +53,8 @@ Return ONLY a valid JSON object with this exact structure (no markdown, no extra
           'x-goog-api-key': geminiKey
         },
         body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }]
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { responseMimeType: "application/json" }
         })
       }
     );
@@ -52,7 +64,7 @@ Return ONLY a valid JSON object with this exact structure (no markdown, no extra
     }
     const text = geminiData.candidates?.[0]?.content?.parts?.[0]?.text;
     if (text) {
-      const clean = text.replace(/```json|```/g, '').trim();
+      const clean = text.replace(/\`\`\`json|\`\`\`/g, '').trim();
       return res.status(200).json({ provider: 'gemini', ...JSON.parse(clean) });
     }
     throw new Error('Gemini returned no text');
@@ -60,7 +72,7 @@ Return ONLY a valid JSON object with this exact structure (no markdown, no extra
     errors.push('Gemini: ' + err.message);
   }
 
-  // 2. Try Groq (UPDATED MODEL NAME)
+  // 2. Try Groq
   try {
     const groqKey = process.env.GROQ_API_KEY;
     if (!groqKey) throw new Error('GROQ_API_KEY not set');
@@ -83,7 +95,7 @@ Return ONLY a valid JSON object with this exact structure (no markdown, no extra
     }
     const text = groqData.choices?.[0]?.message?.content;
     if (text) {
-      const clean = text.replace(/```json|```/g, '').trim();
+      const clean = text.replace(/\`\`\`json|\`\`\`/g, '').trim();
       return res.status(200).json({ provider: 'groq', ...JSON.parse(clean) });
     }
     throw new Error('Groq returned no text');
@@ -91,7 +103,7 @@ Return ONLY a valid JSON object with this exact structure (no markdown, no extra
     errors.push('Groq: ' + err.message);
   }
 
-  // 3. Try OpenRouter (UPDATED MODEL NAME)
+  // 3. Try OpenRouter
   try {
     const orKey = process.env.OPENROUTER_API_KEY;
     if (!orKey) throw new Error('OPENROUTER_API_KEY not set');
@@ -113,7 +125,7 @@ Return ONLY a valid JSON object with this exact structure (no markdown, no extra
     }
     const text = orData.choices?.[0]?.message?.content;
     if (text) {
-      const clean = text.replace(/```json|```/g, '').trim();
+      const clean = text.replace(/\`\`\`json|\`\`\`/g, '').trim();
       return res.status(200).json({ provider: 'openrouter', ...JSON.parse(clean) });
     }
     throw new Error('OpenRouter returned no text');
