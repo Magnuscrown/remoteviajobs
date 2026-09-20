@@ -20,16 +20,24 @@ export default async function handler(req, res) {
     // Remove duplicates based on apply_url
     const uniqueJobs = Array.from(new Map(allJobs.map(job => [job.apply_url, job])).values())
 
-    // THE FIX: We insert using 'apply_url' to conflict on.
+    // ✅ THE FIX: Filter out jobs with missing critical fields
+    const validJobs = uniqueJobs.filter(job => 
+      job.title && job.title.trim() !== '' &&
+      job.apply_url && job.apply_url.trim() !== '' &&
+      job.company && job.company.trim() !== '' &&
+      !job.apply_url.includes('#') &&
+      !job.apply_url.includes('remoteviajobs')
+    )
+
     const { data, error } = await supabase
       .from('jobs')
-      .upsert(uniqueJobs, { onConflict: 'apply_url' })
+      .upsert(validJobs, { onConflict: 'apply_url' })
 
     if (error) {
       return res.status(400).json({ success: false, error: error.message })
     }
 
-    return res.status(200).json({ fetched: uniqueJobs.length, saved: data ? data.length : 0 })
+    return res.status(200).json({ fetched: validJobs.length, saved: data ? data.length : 0 })
 
   } catch (err) {
     return res.status(500).json({ error: err.message })
