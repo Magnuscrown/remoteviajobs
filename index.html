@@ -205,7 +205,14 @@
         async function fetchJobs() {
             const { data, error } = await supabaseClient.from('jobs').select('*').order('created_at', { ascending: false });
             if (error) { document.getElementById('loading').innerText = 'Error loading jobs.'; return; }
-            allJobs = data; document.getElementById('loading').style.display = 'none'; renderJobs(allJobs);
+            allJobs = data.filter(job => 
+              job.title && job.title.trim() !== '' &&
+              job.apply_url && job.apply_url.trim() !== '' &&
+              job.company && job.company.trim() !== '' &&
+              !job.apply_url.includes('#') &&
+              !job.apply_url.includes('remoteviajobs')
+            );
+            document.getElementById('loading').style.display = 'none'; renderJobs(allJobs);
         }
 
         function renderJobs(jobs) {
