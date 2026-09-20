@@ -84,8 +84,8 @@
         .keyword-group { margin-bottom: 15px; }
         .keyword-group h4 { font-size: 0.9rem; margin-bottom: 8px; color: var(--text-dark); }
         .keyword-tag { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; margin: 3px; }
-        .keyword-tag.good { background: #d1fae5; color: #065f46; }
-        .keyword-tag.missing { background: #fee2e2; color: #991b1b; }
+                .keyword-tag.good { background: #dbeafe; color: #1e40af; }
+        .keyword-tag.missing { background: #d1fae5; color: #065f46; }
                 .info-box { background: #f8fafc; border-left: 4px solid #0B3763; border-radius: 10px; padding: 15px 18px; margin-bottom: 15px; }
         .info-box h4 { font-size: 0.9rem; margin-bottom: 10px; color: #0B3763; }
         .info-box p { font-size: 0.85rem; margin-bottom: 5px; color: #475569; }
@@ -386,15 +386,15 @@
                             <ul>${data.whyItDoesntFit.map(item => `<li>${item}</li>`).join('')}</ul>
                         </div>` : ''}
                         
-                        ${data.matchedKeywords && data.matchedKeywords.length ? `
+                                                ${data.matchedKeywords && data.matchedKeywords.length ? `
                         <div class="keyword-group">
-                            <h4>✅ Keywords in Your CV (${data.matchedKeywords.length})</h4>
+                            <h4>✅ ATS Keywords in Your CV (${data.matchedKeywords.length})</h4>
                             ${data.matchedKeywords.map(k => `<span class="keyword-tag good">${k}</span>`).join('')}
                         </div>` : ''}
                         
                         ${data.missingKeywords && data.missingKeywords.length ? `
                         <div class="keyword-group">
-                            <h4>❌ Keywords to Add (${data.missingKeywords.length})</h4>
+                            <h4>➕ ATS Keywords to Add (${data.missingKeywords.length})</h4>
                             ${data.missingKeywords.map(k => `<span class="keyword-tag missing">${k}</span>`).join('')}
                         </div>` : ''}
                         
