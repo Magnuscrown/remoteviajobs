@@ -28,13 +28,13 @@ Return ONLY a valid JSON object with this exact structure (no markdown, no extra
 
   const errors = [];
 
-  // 1. Try Gemini (using new header method that works with AQ. keys)
+  // 1. Try Gemini (UPDATED MODEL NAME)
   try {
     const geminiKey = process.env.GEMINI_API_KEY;
-    if (!geminiKey) throw new Error('GEMINI_API_KEY not set in Vercel');
+    if (!geminiKey) throw new Error('GEMINI_API_KEY not set');
     
     const geminiResponse = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent`,
       {
         method: 'POST',
         headers: { 
@@ -60,10 +60,10 @@ Return ONLY a valid JSON object with this exact structure (no markdown, no extra
     errors.push('Gemini: ' + err.message);
   }
 
-  // 2. Try Groq
+  // 2. Try Groq (UPDATED MODEL NAME)
   try {
     const groqKey = process.env.GROQ_API_KEY;
-    if (!groqKey) throw new Error('GROQ_API_KEY not set in Vercel');
+    if (!groqKey) throw new Error('GROQ_API_KEY not set');
     
     const groqResponse = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
@@ -91,10 +91,10 @@ Return ONLY a valid JSON object with this exact structure (no markdown, no extra
     errors.push('Groq: ' + err.message);
   }
 
-  // 3. Try OpenRouter
+  // 3. Try OpenRouter (UPDATED MODEL NAME)
   try {
     const orKey = process.env.OPENROUTER_API_KEY;
-    if (!orKey) throw new Error('OPENROUTER_API_KEY not set in Vercel');
+    if (!orKey) throw new Error('OPENROUTER_API_KEY not set');
     
     const orResponse = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
@@ -103,7 +103,7 @@ Return ONLY a valid JSON object with this exact structure (no markdown, no extra
         'Authorization': `Bearer ${orKey}`
       },
       body: JSON.stringify({
-        model: 'meta-llama/llama-3.3-70b-instruct:free',
+        model: 'meta-llama/llama-3.3-70b-instruct',
         messages: [{ role: 'user', content: prompt }]
       })
     });
@@ -121,7 +121,6 @@ Return ONLY a valid JSON object with this exact structure (no markdown, no extra
     errors.push('OpenRouter: ' + err.message);
   }
 
-  // All failed — return detailed errors so we can fix them
   return res.status(500).json({ 
     error: 'All AI providers failed.', 
     details: errors 
