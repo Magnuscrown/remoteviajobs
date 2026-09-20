@@ -26,32 +26,45 @@ Return ONLY a valid JSON object with this exact structure (no markdown, no extra
   "summary": "<one sentence summary of the match>"
 }`;
 
-  // Try Gemini first (primary)
+  const errors = [];
+
+  // 1. Try Gemini (using new header method that works with AQ. keys)
   try {
     const geminiKey = process.env.GEMINI_API_KEY;
+    if (!geminiKey) throw new Error('GEMINI_API_KEY not set in Vercel');
+    
     const geminiResponse = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent`,
       {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'x-goog-api-key': geminiKey
+        },
         body: JSON.stringify({
           contents: [{ parts: [{ text: prompt }] }]
         })
       }
     );
     const geminiData = await geminiResponse.json();
+    if (!geminiResponse.ok) {
+      throw new Error(`Gemini ${geminiResponse.status}: ${JSON.stringify(geminiData).substring(0,200)}`);
+    }
     const text = geminiData.candidates?.[0]?.content?.parts?.[0]?.text;
     if (text) {
       const clean = text.replace(/```json|```/g, '').trim();
       return res.status(200).json({ provider: 'gemini', ...JSON.parse(clean) });
     }
+    throw new Error('Gemini returned no text');
   } catch (err) {
-    console.log('Gemini failed:', err.message);
+    errors.push('Gemini: ' + err.message);
   }
 
-  // Fallback: Groq
+  // 2. Try Groq
   try {
     const groqKey = process.env.GROQ_API_KEY;
+    if (!groqKey) throw new Error('GROQ_API_KEY not set in Vercel');
+    
     const groqResponse = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -65,18 +78,24 @@ Return ONLY a valid JSON object with this exact structure (no markdown, no extra
       })
     });
     const groqData = await groqResponse.json();
+    if (!groqResponse.ok) {
+      throw new Error(`Groq ${groqResponse.status}: ${JSON.stringify(groqData).substring(0,200)}`);
+    }
     const text = groqData.choices?.[0]?.message?.content;
     if (text) {
       const clean = text.replace(/```json|```/g, '').trim();
       return res.status(200).json({ provider: 'groq', ...JSON.parse(clean) });
     }
+    throw new Error('Groq returned no text');
   } catch (err) {
-    console.log('Groq failed:', err.message);
+    errors.push('Groq: ' + err.message);
   }
 
-  // Final fallback: OpenRouter
+  // 3. Try OpenRouter
   try {
     const orKey = process.env.OPENROUTER_API_KEY;
+    if (!orKey) throw new Error('OPENROUTER_API_KEY not set in Vercel');
+    
     const orResponse = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -89,14 +108,22 @@ Return ONLY a valid JSON object with this exact structure (no markdown, no extra
       })
     });
     const orData = await orResponse.json();
+    if (!orResponse.ok) {
+      throw new Error(`OpenRouter ${orResponse.status}: ${JSON.stringify(orData).substring(0,200)}`);
+    }
     const text = orData.choices?.[0]?.message?.content;
     if (text) {
       const clean = text.replace(/```json|```/g, '').trim();
       return res.status(200).json({ provider: 'openrouter', ...JSON.parse(clean) });
     }
+    throw new Error('OpenRouter returned no text');
   } catch (err) {
-    console.log('OpenRouter failed:', err.message);
+    errors.push('OpenRouter: ' + err.message);
   }
 
-  return res.status(500).json({ error: 'All AI providers failed. Please try again.' });
+  // All failed — return detailed errors so we can fix them
+  return res.status(500).json({ 
+    error: 'All AI providers failed.', 
+    details: errors 
+  });
 }
