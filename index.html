@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Remote Via Jobs - Find Remote Jobs Worldwide</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root { --primary-color: #0B3763; --accent-color: #00A8FF; --bg-color: #f8fafc; --text-dark: #1e293b; --text-light: #64748b; --white: #ffffff; }
@@ -16,14 +17,22 @@
         .search-box { max-width: 600px; margin: 0 auto; }
         .search-box input { width: 100%; padding: 18px 25px; border-radius: 50px; border: none; font-size: 1rem; font-family: 'Inter', sans-serif; box-shadow: 0 10px 25px rgba(0,0,0,0.1); outline: none; }
         .jobs-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; max-width: 1200px; margin: 0 auto; padding: 0 20px 60px 20px; }
-        .job-card { background: var(--white); padding: 25px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; transition: transform 0.2s; }
-        .job-card:hover { transform: translateY(-5px); }
+        
+        /* ✅ FIXED: Job card hover with lift + shadow */
+        .job-card { background: var(--white); padding: 25px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease; }
+        .job-card:hover { transform: translateY(-8px); box-shadow: 0 20px 30px -5px rgba(11, 55, 99, 0.15), 0 10px 15px -5px rgba(11, 55, 99, 0.1); border-color: #cbd5e1; }
+        
         .job-title { font-size: 1.15rem; font-weight: 700; margin-bottom: 8px; }
         .job-company { font-size: 0.95rem; color: var(--primary-color); margin-bottom: 12px; }
         .job-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
         .job-tag { background: #f1f5f9; color: var(--text-light); font-size: 0.8rem; padding: 4px 10px; border-radius: 20px; font-weight: 500; }
         .job-salary { color: #10b981; font-weight: 600; }
-        .view-details-btn { display: block; background: var(--primary-color); color: var(--white); padding: 12px 20px; border-radius: 10px; text-align: center; font-weight: 600; border: none; cursor: pointer; width: 100%; font-family: 'Inter', sans-serif; }
+        
+        /* ✅ FIXED: View Details button hover color change */
+        .view-details-btn { display: block; background: var(--primary-color); color: var(--white); padding: 12px 20px; border-radius: 10px; text-align: center; font-weight: 600; border: none; cursor: pointer; width: 100%; font-family: 'Inter', sans-serif; transition: background 0.25s ease, transform 0.1s ease; }
+        .view-details-btn:hover { background: var(--accent-color); }
+        .view-details-btn:active { transform: scale(0.98); }
+        
         .loading { text-align: center; font-size: 1.2rem; color: var(--text-light); padding: 40px; grid-column: 1 / -1; }
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(5px); z-index: 1000; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; }
         .modal-overlay.active { display: flex; }
@@ -34,12 +43,40 @@
         .modal-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 25px; padding-bottom: 25px; border-bottom: 1px solid #e2e8f0; }
         .modal-description { font-size: 0.95rem; line-height: 1.8; color: #334155; margin-bottom: 30px; white-space: pre-wrap; word-wrap: break-word; }
         .modal-description p { margin-bottom: 16px; }
-        .modal-apply-btn { display: block; background: var(--primary-color); color: var(--white); padding: 15px 30px; border-radius: 12px; text-align: center; font-weight: 700; text-decoration: none; width: 100%; }
+        .modal-description h1, .modal-description h2, .modal-description h3, .modal-description h4 { margin-top: 20px; margin-bottom: 12px; font-weight: 700; color: #0f172a; }
+        .modal-description ul, .modal-description ol { margin-bottom: 16px; padding-left: 20px; }
+        .modal-description li { margin-bottom: 8px; }
+        
+        /* ✅ FIXED: Apply Now button hover */
+        .modal-apply-btn { display: block; background: var(--primary-color); color: var(--white); padding: 15px 30px; border-radius: 12px; text-align: center; font-weight: 700; text-decoration: none; width: 100%; transition: background 0.25s ease, transform 0.1s ease; }
+        .modal-apply-btn:hover { background: var(--accent-color); }
+        .modal-apply-btn:active { transform: scale(0.98); }
+        
+        /* AI SECTION */
         .ai-section { background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 16px; padding: 25px; margin-bottom: 30px; }
         .ai-section h3 { font-size: 1.1rem; margin-bottom: 8px; color: var(--primary-color); }
         .ai-section p { font-size: 0.85rem; color: var(--text-light); margin-bottom: 15px; }
+        
+        /* ✅ NEW: Tabs for CV input */
+        .cv-tabs { display: flex; gap: 8px; margin-bottom: 15px; background: #e2e8f0; padding: 5px; border-radius: 10px; }
+        .cv-tab { flex: 1; padding: 8px 12px; border: none; background: transparent; border-radius: 8px; font-weight: 600; font-size: 0.85rem; cursor: pointer; color: var(--text-light); font-family: 'Inter', sans-serif; transition: all 0.2s; }
+        .cv-tab.active { background: white; color: var(--primary-color); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .cv-panel { display: none; }
+        .cv-panel.active { display: block; }
+        
         .ai-section textarea { width: 100%; min-height: 120px; padding: 12px; border: 1px solid #cbd5e1; border-radius: 10px; font-family: 'Inter', sans-serif; font-size: 0.9rem; resize: vertical; margin-bottom: 12px; }
-        .ai-btn { background: var(--accent-color); color: white; border: none; padding: 12px 25px; border-radius: 10px; font-weight: 600; cursor: pointer; width: 100%; font-family: 'Inter', sans-serif; font-size: 0.95rem; }
+        
+        /* ✅ NEW: Drag & drop zone */
+        .drop-zone { border: 2px dashed #cbd5e1; border-radius: 12px; padding: 30px 20px; text-align: center; cursor: pointer; background: white; transition: all 0.2s; margin-bottom: 12px; }
+        .drop-zone:hover, .drop-zone.dragover { border-color: var(--accent-color); background: #eff6ff; }
+        .drop-zone-icon { font-size: 2rem; margin-bottom: 8px; }
+        .drop-zone p { font-size: 0.85rem; color: var(--text-light); margin: 0; }
+        .drop-zone strong { color: var(--primary-color); }
+        .file-status { font-size: 0.85rem; color: #10b981; font-weight: 600; margin-top: 8px; text-align: center; display: none; }
+        .file-status.active { display: block; }
+        
+        .ai-btn { background: var(--accent-color); color: white; border: none; padding: 12px 25px; border-radius: 10px; font-weight: 600; cursor: pointer; width: 100%; font-family: 'Inter', sans-serif; font-size: 0.95rem; transition: background 0.2s; }
+        .ai-btn:hover:not(:disabled) { background: #0093dd; }
         .ai-btn:disabled { opacity: 0.6; cursor: not-allowed; }
         .ai-result { margin-top: 20px; display: none; }
         .ai-result.active { display: block; }
@@ -49,6 +86,7 @@
         .keyword-tag { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; margin: 3px; }
         .keyword-tag.good { background: #d1fae5; color: #065f46; }
         .keyword-tag.missing { background: #fee2e2; color: #991b1b; }
+        
         footer { background: #0f172a; color: #94a3b8; padding: 50px 20px 30px 20px; text-align: center; }
         .footer-logo { font-size: 1.5rem; font-weight: 700; color: var(--white); margin-bottom: 15px; letter-spacing: 2px; }
         .footer-tagline { margin-bottom: 25px; color: #cbd5e1; }
@@ -56,7 +94,7 @@
         .footer-links a { color: #94a3b8; text-decoration: none; font-size: 0.9rem; }
         .footer-founder { font-size: 0.9rem; border-top: 1px solid #1e293b; padding-top: 20px; max-width: 400px; margin: 0 auto; }
         .footer-founder strong { color: var(--white); }
-        @media (max-width: 600px) { .hero h1 { font-size: 1.8rem; } .jobs-container { grid-template-columns: 1fr; } }
+        @media (max-width: 600px) { .hero h1 { font-size: 1.8rem; } .jobs-container { grid-template-columns: 1fr; } .cv-tab { font-size: 0.75rem; padding: 6px 8px; } }
     </style>
 </head>
 <body>
@@ -80,8 +118,40 @@
 
             <div class="ai-section">
                 <h3>🤖 AI Match Checker</h3>
-                <p>Paste your CV below. Our AI will analyze it against this job and tell you your match score and keywords to add.</p>
-                <textarea id="cvInput" placeholder="Paste your CV text here..."></textarea>
+                <p>Add your CV to see your match score and keywords to add.</p>
+                
+                <!-- ✅ NEW TABS -->
+                <div class="cv-tabs">
+                    <button class="cv-tab active" onclick="switchTab('paste')">📝 Paste Text</button>
+                    <button class="cv-tab" onclick="switchTab('upload')">📁 Upload File</button>
+                    <button class="cv-tab" onclick="switchTab('drop')">📥 Drag & Drop</button>
+                </div>
+                
+                <!-- Panel 1: Paste Text -->
+                <div class="cv-panel active" id="panel-paste">
+                    <textarea id="cvInput" placeholder="Paste your CV text here..."></textarea>
+                </div>
+                
+                <!-- Panel 2: Upload File -->
+                <div class="cv-panel" id="panel-upload">
+                    <input type="file" id="cvFileInput" accept=".pdf,.txt,.doc,.docx" style="display:none;" onchange="handleFileUpload(event)">
+                    <div class="drop-zone" onclick="document.getElementById('cvFileInput').click()">
+                        <div class="drop-zone-icon">📁</div>
+                        <p>Click to <strong>browse</strong> your CV file</p>
+                        <p style="font-size:0.75rem; margin-top:5px;">Supports PDF, TXT, DOC, DOCX</p>
+                    </div>
+                </div>
+                
+                <!-- Panel 3: Drag & Drop -->
+                <div class="cv-panel" id="panel-drop">
+                    <div class="drop-zone" id="dropZone">
+                        <div class="drop-zone-icon">📥</div>
+                        <p><strong>Drag & drop</strong> your CV here</p>
+                        <p style="font-size:0.75rem; margin-top:5px;">Supports PDF, TXT, DOC, DOCX</p>
+                    </div>
+                </div>
+                
+                <div class="file-status" id="fileStatus"></div>
                 <button class="ai-btn" id="checkMatchBtn" onclick="checkMatch()">Check My Match</button>
                 <div class="ai-result" id="aiResult"></div>
             </div>
@@ -106,11 +176,17 @@
     </footer>
 
     <script>
+        // Set PDF.js worker
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
         const SUPABASE_URL = 'https://xsuqoebwpuxnhjpjzysv.supabase.co';
+        // 🚨 PASTE YOUR SUPABASE ANON KEY BELOW 🚨
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzdXFvZWJ3cHV4bmhqcGp6eXN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk1OTg4NjQsImV4cCI6MjEwNTE3NDg2NH0.fVRP2mQU_yExjbTvUJzbsHCTQnIa2JBUJcidozSIxCQ';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
         let allJobs = [];
         let currentJobIndex = null;
+        let extractedCVText = '';
 
         async function fetchJobs() {
             const { data, error } = await supabaseClient.from('jobs').select('*').order('created_at', { ascending: false });
@@ -152,14 +228,19 @@
             `;
             document.getElementById('modalDescription').innerHTML = job.description || 'No description available.';
             document.getElementById('modalApplyBtn').href = job.apply_url || '#';
+            
+            // Reset CV section
             document.getElementById('cvInput').value = '';
             document.getElementById('aiResult').classList.remove('active');
             document.getElementById('aiResult').innerHTML = '';
+            document.getElementById('fileStatus').classList.remove('active');
+            document.getElementById('fileStatus').textContent = '';
+            extractedCVText = '';
+            switchTab('paste');
+            
             document.getElementById('jobModal').classList.add('active');
             document.body.style.overflow = 'hidden';
-            requestAnimationFrame(() => {
-                document.querySelector('.modal-content').scrollTop = 0;
-            });
+            requestAnimationFrame(() => { document.querySelector('.modal-content').scrollTop = 0; });
         }
 
         function closeModal() {
@@ -167,12 +248,77 @@
             document.body.style.overflow = 'auto';
         }
 
+        // ✅ NEW: Tab switching
+        function switchTab(tab) {
+            document.querySelectorAll('.cv-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.cv-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.cv-tab').forEach(t => {
+                if (t.textContent.toLowerCase().includes(tab === 'paste' ? 'paste' : tab === 'upload' ? 'upload' : 'drag')) {
+                    t.classList.add('active');
+                }
+            });
+            document.getElementById('panel-' + tab).classList.add('active');
+        }
+
+        // ✅ NEW: File upload handler
+        async function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            await processFile(file);
+        }
+
+        // ✅ NEW: Process PDF, TXT, DOC
+        async function processFile(file) {
+            const status = document.getElementById('fileStatus');
+            status.classList.add('active');
+            status.style.color = '#3b82f6';
+            status.textContent = '📄 Reading file...';
+            
+            try {
+                let text = '';
+                if (file.name.toLowerCase().endsWith('.pdf')) {
+                    const arrayBuffer = await file.arrayBuffer();
+                    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+                    for (let i = 1; i <= pdf.numPages; i++) {
+                        const page = await pdf.getPage(i);
+                        const content = await page.getTextContent();
+                        text += content.items.map(item => item.str).join(' ') + '\n';
+                    }
+                } else {
+                    // TXT, DOC, DOCX treated as text (DOC/DOCX will have some junk but works)
+                    text = await file.text();
+                }
+                extractedCVText = text;
+                document.getElementById('cvInput').value = text;
+                status.style.color = '#10b981';
+                status.textContent = `✅ CV loaded: ${file.name} (${text.length} characters)`;
+            } catch (err) {
+                status.style.color = '#ef4444';
+                status.textContent = '❌ Error reading file. Try pasting your CV text instead.';
+            }
+        }
+
+        // ✅ NEW: Drag & drop
+        const dropZone = document.getElementById('dropZone');
+        if (dropZone) {
+            ['dragenter', 'dragover'].forEach(evt => {
+                dropZone.addEventListener(evt, (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
+            });
+            ['dragleave', 'drop'].forEach(evt => {
+                dropZone.addEventListener(evt, (e) => { e.preventDefault(); dropZone.classList.remove('dragover'); });
+            });
+            dropZone.addEventListener('drop', async (e) => {
+                const file = e.dataTransfer.files[0];
+                if (file) await processFile(file);
+            });
+        }
+
         document.getElementById('jobModal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
         document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeModal(); });
 
         async function checkMatch() {
-            const cv = document.getElementById('cvInput').value.trim();
-            if (!cv) { alert('Please paste your CV first.'); return; }
+            const cv = document.getElementById('cvInput').value.trim() || extractedCVText.trim();
+            if (!cv) { alert('Please paste, upload, or drop your CV first.'); return; }
             const job = allJobs[currentJobIndex];
             const btn = document.getElementById('checkMatchBtn');
             const result = document.getElementById('aiResult');
