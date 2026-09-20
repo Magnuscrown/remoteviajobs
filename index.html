@@ -7,92 +7,69 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-color: #0B3763;
-            --accent-color: #00A8FF;
-            --bg-color: #f8fafc;
-            --text-dark: #1e293b;
-            --text-light: #64748b;
-            --white: #ffffff;
-        }
+        :root { --primary-color: #0B3763; --accent-color: #00A8FF; --bg-color: #f8fafc; --text-dark: #1e293b; --text-light: #64748b; --white: #ffffff; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Inter', sans-serif; background-color: var(--bg-color); color: var(--text-dark); line-height: 1.6; }
-        
         .hero { background: linear-gradient(135deg, var(--primary-color) 0%, #1e4b7a 100%); color: var(--white); padding: 60px 20px 80px 20px; text-align: center; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; margin-bottom: 40px; }
         .hero h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 10px; letter-spacing: 1px; }
         .hero p { font-size: 1.1rem; opacity: 0.9; margin-bottom: 30px; }
-        .search-box { max-width: 600px; margin: 0 auto; position: relative; }
-        .search-box input { width: 100%; padding: 18px 25px; border-radius: 50px; border: none; font-size: 1rem; font-family: 'Inter', sans-serif; box-shadow: 0 10px 25px rgba(0,0,0,0.1); outline: none; transition: box-shadow 0.3s ease; }
-        .search-box input:focus { box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-        
+        .search-box { max-width: 600px; margin: 0 auto; }
+        .search-box input { width: 100%; padding: 18px 25px; border-radius: 50px; border: none; font-size: 1rem; font-family: 'Inter', sans-serif; box-shadow: 0 10px 25px rgba(0,0,0,0.1); outline: none; }
         .jobs-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; max-width: 1200px; margin: 0 auto; padding: 0 20px 60px 20px; }
-        
-        .job-card { background: var(--white); padding: 25px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s ease, box-shadow 0.2s ease; cursor: pointer; }
-        .job-card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
-        
-        .job-title { font-size: 1.15rem; font-weight: 700; color: var(--text-dark); margin-bottom: 8px; line-height: 1.3; }
-        .job-company { font-size: 0.95rem; font-weight: 500; color: var(--primary-color); margin-bottom: 12px; }
+        .job-card { background: var(--white); padding: 25px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; transition: transform 0.2s; }
+        .job-card:hover { transform: translateY(-5px); }
+        .job-title { font-size: 1.15rem; font-weight: 700; margin-bottom: 8px; }
+        .job-company { font-size: 0.95rem; color: var(--primary-color); margin-bottom: 12px; }
         .job-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
-        .job-tag { background: #f1f5f9; color: var(--text-light); font-size: 0.8rem; padding: 4px 10px; border-radius: 20px; font-weight: 500; display: inline-flex; align-items: center; gap: 5px; }
-        .job-salary { color: #10b981; font-weight: 600; font-size: 0.9rem; }
-        
-        .view-details-btn { display: block; background: var(--primary-color); color: var(--white); padding: 12px 20px; text-decoration: none; border-radius: 10px; text-align: center; font-weight: 600; font-size: 0.95rem; transition: background 0.3s ease; margin-top: auto; border: none; cursor: pointer; width: 100%; font-family: 'Inter', sans-serif; }
-        .view-details-btn:hover { background: var(--accent-color); }
-        
+        .job-tag { background: #f1f5f9; color: var(--text-light); font-size: 0.8rem; padding: 4px 10px; border-radius: 20px; font-weight: 500; }
+        .job-salary { color: #10b981; font-weight: 600; }
+        .view-details-btn { display: block; background: var(--primary-color); color: var(--white); padding: 12px 20px; border-radius: 10px; text-align: center; font-weight: 600; border: none; cursor: pointer; width: 100%; font-family: 'Inter', sans-serif; }
         .loading { text-align: center; font-size: 1.2rem; color: var(--text-light); padding: 40px; grid-column: 1 / -1; }
-        
-        /* MODAL STYLES */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(5px); z-index: 1000; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; }
         .modal-overlay.active { display: flex; }
-        .modal-content { background: var(--white); border-radius: 20px; max-width: 700px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 35px; position: relative; animation: slideUp 0.3s ease; }
-        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        
-        .modal-close { position: absolute; top: 15px; right: 15px; background: #f1f5f9; border: none; width: 40px; height: 40px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; color: var(--text-dark); transition: background 0.2s; }
-        .modal-close:hover { background: #e2e8f0; }
-        
+        .modal-content { background: var(--white); border-radius: 20px; max-width: 700px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 35px; position: relative; }
+        .modal-close { position: absolute; top: 15px; right: 15px; background: #f1f5f9; border: none; width: 40px; height: 40px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; }
         .modal-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 10px; padding-right: 40px; }
-        .modal-company { color: var(--primary-color); font-weight: 600; margin-bottom: 15px; font-size: 1.05rem; }
+        .modal-company { color: var(--primary-color); font-weight: 600; margin-bottom: 15px; }
         .modal-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 25px; padding-bottom: 25px; border-bottom: 1px solid #e2e8f0; }
-        
-        /* NEW: Better styling for the description to give it spaces and sections */
         .modal-description { font-size: 0.95rem; line-height: 1.8; color: #334155; margin-bottom: 30px; white-space: pre-wrap; word-wrap: break-word; }
         .modal-description p { margin-bottom: 16px; }
-        .modal-description ul, .modal-description ol { margin-bottom: 16px; padding-left: 20px; }
-        .modal-description li { margin-bottom: 8px; }
-        .modal-description h1, .modal-description h2, .modal-description h3, .modal-description h4 { margin-top: 24px; margin-bottom: 12px; font-weight: 700; color: #0f172a; line-height: 1.4; }
-        .modal-description h2 { font-size: 1.25rem; }
-        .modal-description h3 { font-size: 1.1rem; }
-        .modal-description strong { font-weight: 700; color: #0f172a; }
-        
-        .modal-apply-btn { display: block; background: var(--primary-color); color: var(--white); padding: 15px 30px; text-decoration: none; border-radius: 12px; text-align: center; font-weight: 700; font-size: 1.05rem; transition: background 0.3s ease; width: 100%; }
-        .modal-apply-btn:hover { background: var(--accent-color); }
-        
-        footer { background: #0f172a; color: #94a3b8; padding: 50px 20px 30px 20px; text-align: center; border-top: 1px solid #1e293b; }
+        .modal-apply-btn { display: block; background: var(--primary-color); color: var(--white); padding: 15px 30px; border-radius: 12px; text-align: center; font-weight: 700; text-decoration: none; width: 100%; }
+        .ai-section { background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 16px; padding: 25px; margin-bottom: 30px; }
+        .ai-section h3 { font-size: 1.1rem; margin-bottom: 8px; color: var(--primary-color); }
+        .ai-section p { font-size: 0.85rem; color: var(--text-light); margin-bottom: 15px; }
+        .ai-section textarea { width: 100%; min-height: 120px; padding: 12px; border: 1px solid #cbd5e1; border-radius: 10px; font-family: 'Inter', sans-serif; font-size: 0.9rem; resize: vertical; margin-bottom: 12px; }
+        .ai-btn { background: var(--accent-color); color: white; border: none; padding: 12px 25px; border-radius: 10px; font-weight: 600; cursor: pointer; width: 100%; font-family: 'Inter', sans-serif; font-size: 0.95rem; }
+        .ai-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .ai-result { margin-top: 20px; display: none; }
+        .ai-result.active { display: block; }
+        .match-score { font-size: 2rem; font-weight: 700; color: var(--primary-color); text-align: center; margin-bottom: 15px; }
+        .keyword-group { margin-bottom: 15px; }
+        .keyword-group h4 { font-size: 0.9rem; margin-bottom: 8px; color: var(--text-dark); }
+        .keyword-tag { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; margin: 3px; }
+        .keyword-tag.good { background: #d1fae5; color: #065f46; }
+        .keyword-tag.missing { background: #fee2e2; color: #991b1b; }
+        footer { background: #0f172a; color: #94a3b8; padding: 50px 20px 30px 20px; text-align: center; }
         .footer-logo { font-size: 1.5rem; font-weight: 700; color: var(--white); margin-bottom: 15px; letter-spacing: 2px; }
-        .footer-tagline { font-size: 0.95rem; margin-bottom: 25px; color: #cbd5e1; }
+        .footer-tagline { margin-bottom: 25px; color: #cbd5e1; }
         .footer-links { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; flex-wrap: wrap; }
-        .footer-links a { color: #94a3b8; text-decoration: none; font-size: 0.9rem; transition: color 0.3s ease; }
-        .footer-links a:hover { color: var(--white); }
-        .footer-founder { font-size: 0.9rem; color: #94a3b8; border-top: 1px solid #1e293b; padding-top: 20px; max-width: 400px; margin: 0 auto; }
-        .footer-founder strong { color: var(--white); font-weight: 600; }
-        
-        @media (max-width: 600px) { .hero h1 { font-size: 1.8rem; } .hero p { font-size: 1rem; } .jobs-container { grid-template-columns: 1fr; } .modal-content { padding: 25px; } .modal-title { font-size: 1.25rem; } }
+        .footer-links a { color: #94a3b8; text-decoration: none; font-size: 0.9rem; }
+        .footer-founder { font-size: 0.9rem; border-top: 1px solid #1e293b; padding-top: 20px; max-width: 400px; margin: 0 auto; }
+        .footer-founder strong { color: var(--white); }
+        @media (max-width: 600px) { .hero h1 { font-size: 1.8rem; } .jobs-container { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
-
     <header class="hero">
-        <h1 style="font-size: 2rem; margin-bottom: 15px;">Remote Via Jobs</h1>
+        <h1>Remote Via Jobs</h1>
         <p>Find Remote Jobs Worldwide</p>
         <div class="search-box">
             <input type="text" id="searchInput" placeholder="Search for job title, company, or skill..." onkeyup="filterJobs()">
         </div>
     </header>
-
     <div id="loading" class="loading">Loading jobs...</div>
     <div class="jobs-container" id="jobsContainer"></div>
 
-    <!-- MODAL -->
     <div class="modal-overlay" id="jobModal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal()">&times;</button>
@@ -100,6 +77,15 @@
             <p class="modal-company" id="modalCompany"></p>
             <div class="modal-meta" id="modalMeta"></div>
             <div class="modal-description" id="modalDescription"></div>
+
+            <div class="ai-section">
+                <h3>🤖 AI Match Checker</h3>
+                <p>Paste your CV below. Our AI will analyze it against this job and tell you your match score and keywords to add.</p>
+                <textarea id="cvInput" placeholder="Paste your CV text here..."></textarea>
+                <button class="ai-btn" id="checkMatchBtn" onclick="checkMatch()">Check My Match</button>
+                <div class="ai-result" id="aiResult"></div>
+            </div>
+
             <a href="#" target="_blank" class="modal-apply-btn" id="modalApplyBtn">Apply Now</a>
         </div>
     </div>
@@ -108,10 +94,10 @@
         <div class="footer-logo">R V J</div>
         <p class="footer-tagline">Find Remote Jobs Worldwide</p>
         <div class="footer-links">
-            <a href="#">About</a>
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Service</a>
-            <a href="#">Contact Us</a>
+            <a href="/about.html">About</a>
+            <a href="/privacy.html">Privacy Policy</a>
+            <a href="/terms.html">Terms of Service</a>
+            <a href="/contact.html">Contact Us</a>
         </div>
         <div class="footer-founder">
             <p><strong>Magnus Crown</strong> | Founder & CEO</p>
@@ -121,33 +107,29 @@
 
     <script>
         const SUPABASE_URL = 'https://xsuqoebwpuxnhjpjzysv.supabase.co';
-        // 🚨 PASTE YOUR FULL ANON KEY BELOW 🚨
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzdXFvZWJ3cHV4bmhqcGp6eXN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk1OTg4NjQsImV4cCI6MjEwNTE3NDg2NH0.fVRP2mQU_yExjbTvUJzbsHCTQnIa2JBUJcidozSIxCQ';
-
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         let allJobs = [];
+        let currentJobIndex = null;
 
         async function fetchJobs() {
             const { data, error } = await supabaseClient.from('jobs').select('*').order('created_at', { ascending: false });
-            if (error) { console.error('Error fetching jobs:', error); document.getElementById('loading').innerText = 'Error loading jobs.'; return; }
+            if (error) { document.getElementById('loading').innerText = 'Error loading jobs.'; return; }
             allJobs = data; document.getElementById('loading').style.display = 'none'; renderJobs(allJobs);
         }
-
-        // ❌ REMOVED THE stripHtml FUNCTION. We are now keeping the HTML for proper formatting.
 
         function renderJobs(jobs) {
             const container = document.getElementById('jobsContainer'); container.innerHTML = '';
             if (jobs.length === 0) { container.innerHTML = '<p style="text-align:center; grid-column: 1/-1;">No jobs found.</p>'; return; }
             jobs.forEach((job, index) => {
                 const card = document.createElement('div'); card.className = 'job-card';
-                const location = job.location || 'Remote';
                 const salary = job.salary && job.salary !== 'Not specified' ? job.salary : null;
                 card.innerHTML = `
                     <div>
                         <h2 class="job-title">${job.title || 'Untitled Job'}</h2>
                         <p class="job-company">${job.company || 'Unknown Company'}</p>
                         <div class="job-meta">
-                            <span class="job-tag">📍 ${location}</span>
+                            <span class="job-tag">📍 ${job.location || 'Remote'}</span>
                             ${salary ? `<span class="job-tag job-salary">💰 ${salary}</span>` : ''}
                         </div>
                     </div>
@@ -158,6 +140,7 @@
         }
 
         function openModal(index) {
+            currentJobIndex = index;
             const job = allJobs[index];
             if (!job) return;
             document.getElementById('modalTitle').textContent = job.title || 'Untitled Job';
@@ -167,14 +150,16 @@
                 ${job.salary && job.salary !== 'Not specified' ? `<span class="job-tag job-salary">💰 ${job.salary}</span>` : ''}
                 ${job.source ? `<span class="job-tag">Source: ${job.source}</span>` : ''}
             `;
-            
-            // ✅ CHANGED: We use innerHTML to KEEP the formatting (paragraphs, bullet points, etc.)
             document.getElementById('modalDescription').innerHTML = job.description || 'No description available.';
-            
             document.getElementById('modalApplyBtn').href = job.apply_url || '#';
-            document.querySelector('.modal-content').scrollTop = 0;
+            document.getElementById('cvInput').value = '';
+            document.getElementById('aiResult').classList.remove('active');
+            document.getElementById('aiResult').innerHTML = '';
             document.getElementById('jobModal').classList.add('active');
             document.body.style.overflow = 'hidden';
+            requestAnimationFrame(() => {
+                document.querySelector('.modal-content').scrollTop = 0;
+            });
         }
 
         function closeModal() {
@@ -182,13 +167,47 @@
             document.body.style.overflow = 'auto';
         }
 
-        document.getElementById('jobModal').addEventListener('click', function(e) {
-            if (e.target === this) closeModal();
-        });
+        document.getElementById('jobModal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+        document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeModal(); });
 
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') closeModal();
-        });
+        async function checkMatch() {
+            const cv = document.getElementById('cvInput').value.trim();
+            if (!cv) { alert('Please paste your CV first.'); return; }
+            const job = allJobs[currentJobIndex];
+            const btn = document.getElementById('checkMatchBtn');
+            const result = document.getElementById('aiResult');
+            btn.disabled = true; btn.textContent = 'Analyzing...';
+            result.classList.add('active');
+            result.innerHTML = '<p style="text-align:center;">🤖 AI is reading your CV... (10-20 seconds)</p>';
+            try {
+                const response = await fetch('/api/check-match', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ jobDescription: job.description || job.title, userCV: cv })
+                });
+                const data = await response.json();
+                if (data.error) {
+                    result.innerHTML = `<p style="color:red;">Error: ${data.error}</p>`;
+                } else {
+                    result.innerHTML = `
+                        <div class="match-score">${data.matchScore}% Match</div>
+                        <p style="text-align:center; margin-bottom:20px; font-size:0.9rem; color:#64748b;">${data.summary || ''}</p>
+                        <div class="keyword-group">
+                            <h4>✅ Keywords in your CV (${data.matchedKeywords?.length || 0})</h4>
+                            ${(data.matchedKeywords || []).map(k => `<span class="keyword-tag good">${k}</span>`).join('')}
+                        </div>
+                        <div class="keyword-group">
+                            <h4>❌ Keywords to add (${data.missingKeywords?.length || 0})</h4>
+                            ${(data.missingKeywords || []).map(k => `<span class="keyword-tag missing">${k}</span>`).join('')}
+                        </div>
+                        <p style="font-size:0.75rem; color:#94a3b8; text-align:center; margin-top:15px;">Powered by AI • Free • No signup needed</p>
+                    `;
+                }
+            } catch (err) {
+                result.innerHTML = `<p style="color:red;">Error: ${err.message}</p>`;
+            }
+            btn.disabled = false; btn.textContent = 'Check My Match';
+        }
 
         function filterJobs() {
             const query = document.getElementById('searchInput').value.toLowerCase();
