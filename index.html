@@ -18,7 +18,7 @@
         .search-box { max-width: 600px; margin: 0 auto; }
         .search-box input { width: 100%; padding: 18px 25px; border-radius: 50px; border: none; font-size: 1rem; font-family: 'Inter', sans-serif; box-shadow: 0 10px 25px rgba(0,0,0,0.1); outline: none; }
         .jobs-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; max-width: 1200px; margin: 0 auto; padding: 0 20px 60px 20px; }
-        .job-card { background: var(--white); padding: 25px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease; }
+        .job-card { background: var(--white); padding: 25px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease; position: relative; }
         .job-card:hover { transform: translateY(-8px); box-shadow: 0 20px 30px -5px rgba(11, 55, 99, 0.15), 0 10px 15px -5px rgba(11, 55, 99, 0.1); border-color: #cbd5e1; }
         .job-title { font-size: 1.15rem; font-weight: 700; margin-bottom: 8px; }
         .job-company { font-size: 0.95rem; color: var(--primary-color); margin-bottom: 12px; }
@@ -92,7 +92,51 @@
         .footer-links a { color: #94a3b8; text-decoration: none; font-size: 0.9rem; }
         .footer-founder { font-size: 0.9rem; border-top: 1px solid #1e293b; padding-top: 20px; max-width: 400px; margin: 0 auto; }
         .footer-founder strong { color: var(--white); }
-        
+
+        /* POPULAR SEARCHES */
+        .popular-searches { text-align: center; margin-top: 20px; font-size: 0.85rem; }
+        .popular-searches span { color: #cbd5e1; margin-right: 8px; }
+        .popular-searches button { background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.25); padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; cursor: pointer; margin: 4px; font-family: 'Inter', sans-serif; transition: all 0.2s; }
+        .popular-searches button:hover { background: white; color: #0B3763; }
+
+        /* TOP CTA BANNER */
+        .top-cta { background: #fffbeb; border: 2px dashed #f59e0b; border-radius: 16px; padding: 20px 25px; margin: 0 auto 30px; max-width: 900px; text-align: center; }
+        .top-cta p { color: #92400e; font-weight: 600; font-size: 0.95rem; margin-bottom: 12px; }
+        .top-cta button { background: #0B3763; color: white; border: none; padding: 10px 24px; border-radius: 25px; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; font-size: 0.9rem; transition: background 0.2s; }
+        .top-cta button:hover { background: #00A8FF; }
+
+        /* SAVE JOB BUTTON */
+        .job-save-btn { position: absolute; top: 12px; right: 12px; background: white; border: 1px solid #e2e8f0; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; transition: all 0.2s; z-index: 2; }
+        .job-save-btn:hover { background: #f0fdf4; border-color: #10b981; transform: scale(1.1); }
+        .job-save-btn.saved { background: #d1fae5; border-color: #10b981; }
+
+        /* FAQ SECTION */
+        .faq-section { max-width: 800px; margin: 40px auto; padding: 0 20px; }
+        .faq-section h2 { text-align: center; color: #0B3763; font-size: 1.8rem; margin-bottom: 30px; }
+        .faq-item { background: white; border-radius: 12px; margin-bottom: 12px; border: 1px solid #e2e8f0; overflow: hidden; }
+        .faq-question { padding: 18px 22px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; color: #0B3763; font-size: 0.95rem; transition: background 0.2s; }
+        .faq-question:hover { background: #f8fafc; }
+        .faq-question .arrow { font-size: 1rem; transition: transform 0.2s; color: #00A8FF; }
+        .faq-item.open .faq-question .arrow { transform: rotate(180deg); }
+        .faq-answer { display: none; padding: 0 22px 18px; color: #475569; font-size: 0.9rem; line-height: 1.7; }
+        .faq-item.open .faq-answer { display: block; }
+
+        /* EMAIL SUBSCRIBE SECTION */
+        .subscribe-section { background: linear-gradient(135deg, #0B3763 0%, #1e4b7a 100%); padding: 60px 20px; margin: 40px 0; }
+        .subscribe-inner { max-width: 700px; margin: 0 auto; text-align: center; color: white; }
+        .subscribe-inner h2 { font-size: 1.8rem; font-weight: 700; margin-bottom: 12px; }
+        .subscribe-inner > p { color: #cbd5e1; margin-bottom: 30px; font-size: 1rem; }
+        .subscribe-form { display: flex; flex-direction: column; gap: 12px; max-width: 500px; margin: 0 auto; }
+        .subscribe-form input { padding: 15px 20px; border: none; border-radius: 12px; font-size: 1rem; font-family: 'Inter', sans-serif; outline: none; }
+        .subscribe-form input:focus { box-shadow: 0 0 0 3px rgba(0, 168, 255, 0.4); }
+        .subscribe-form button { padding: 15px 20px; background: #00A8FF; color: white; border: none; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; transition: background 0.2s; }
+        .subscribe-form button:hover:not(:disabled) { background: #0093dd; }
+        .subscribe-form button:disabled { opacity: 0.6; cursor: not-allowed; }
+        .subscribe-status { margin-top: 15px; font-size: 0.9rem; font-weight: 600; min-height: 20px; }
+        .subscribe-status.success { color: #4ade80; }
+        .subscribe-status.error { color: #f87171; }
+        .subscribe-privacy { font-size: 0.78rem; color: #cbd5e1; margin-top: 18px; }
+
         /* ===== RVJ AI CHAT WIDGET ===== */
         .rvj-ai-wrapper { position: fixed; bottom: 24px; right: 24px; z-index: 999; display: flex; flex-direction: column; align-items: center; gap: 6px; }
         .rvj-ai-label { background: #0B3763; color: white; padding: 4px 12px; border-radius: 12px; font-size: 0.7rem; font-weight: 700; letter-spacing: 1px; box-shadow: 0 4px 10px rgba(11, 55, 99, 0.3); pointer-events: none; }
@@ -135,11 +179,13 @@
             .rvj-ai-wrapper { bottom: 90px; right: 16px; }
             .rvj-ai-fab { width: 54px; height: 54px; font-size: 1.4rem; }
             .rvj-ai-window { bottom: 155px; right: 16px; left: 16px; width: auto; height: calc(100vh - 240px); }
+            .subscribe-inner h2 { font-size: 1.4rem; }
+            .subscribe-section { padding: 45px 20px; }
         }
     </style>
 </head>
 <body>
-        <header class="hero">
+    <header class="hero">
         <div style="max-width: 1200px; margin: 0 auto 30px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
             <span style="color: white; font-weight: 700; font-size: 1.1rem; letter-spacing: 1px;">REMOTE VIA JOBS</span>
             <a href="/blog.html" style="color: white; background: rgba(255,255,255,0.15); padding: 10px 22px; border-radius: 25px; text-decoration: none; font-weight: 600; font-size: 0.9rem; display: inline-block; transition: background 0.2s; border: 1px solid rgba(255,255,255,0.25);">📚 Career Blog</a>
@@ -149,7 +195,22 @@
         <div class="search-box">
             <input type="text" id="searchInput" placeholder="Search for job title, company, or skill..." onkeyup="filterJobs()">
         </div>
+        <div class="popular-searches">
+            <span>🔥 Popular:</span>
+            <button onclick="quickSearch('customer service')">Customer Service</button>
+            <button onclick="quickSearch('engineer')">Engineering</button>
+            <button onclick="quickSearch('marketing')">Marketing</button>
+            <button onclick="quickSearch('data')">Data Entry</button>
+            <button onclick="quickSearch('designer')">Design</button>
+            <button onclick="quickSearch('support')">Support</button>
+        </div>
     </header>
+
+    <div class="top-cta">
+        <p>💼 Didn't find the job you want? Tell us what you're looking for — we'll email you when matching jobs appear.</p>
+        <button onclick="scrollToSubscribe()">🔔 Get Free Job Alerts</button>
+    </div>
+
     <div id="loading" class="loading">Loading jobs...</div>
     <div class="jobs-container" id="jobsContainer"></div>
 
@@ -196,10 +257,90 @@
         </div>
     </div>
 
+    <!-- FAQ SECTION -->
+    <section class="faq-section">
+        <h2>Frequently Asked Questions</h2>
+        
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-question">Is Remote Via Jobs really free? <span class="arrow">▼</span></div>
+            <div class="faq-answer">Yes, 100% free forever. No account needed, no signup, no hidden fees. We make money through ads and partnerships, not by charging job seekers.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-question">Do I need to create an account? <span class="arrow">▼</span></div>
+            <div class="faq-answer">No. You can browse all jobs, use the AI Match Checker, chat with RVJ AI, and apply to jobs without ever creating an account.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-question">How does the AI Match Checker work? <span class="arrow">▼</span></div>
+            <div class="faq-answer">Click any job → "View Details" → scroll to the AI Match Checker → upload or paste your CV → click "Check My Match." Our AI analyzes your CV against the job and gives you a match score, missing keywords, and personalized tips — in about 10-20 seconds.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-question">Do you save my CV? <span class="arrow">▼</span></div>
+            <div class="faq-answer">Absolutely not. Your CV is sent securely to our AI partners, analyzed in real-time, and immediately deleted. We never store, save, or share your CV. It disappears as soon as you close the browser.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-question">Where do the jobs come from? <span class="arrow">▼</span></div>
+            <div class="faq-answer">We aggregate remote job listings from trusted global job platforms. Every listing links directly to the original source where you can apply. We update our job board every 24 hours automatically.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-question">How often are new jobs added? <span class="arrow">▼</span></div>
+            <div class="faq-answer">Every 24 hours. Our system automatically fetches new remote jobs from multiple trusted sources at midnight daily. Jobs expire after 14 days to keep our listings fresh.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-question">Can I apply directly on your website? <span class="arrow">▼</span></div>
+            <div class="faq-answer">No. Remote Via Jobs is a job aggregator. When you click "Apply Now," we redirect you to the original job source (the company's career page or the platform where the job was posted) so you can apply there.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-question">Do you offer job alerts? <span class="arrow">▼</span></div>
+            <div class="faq-answer">Yes! Subscribe with your email and tell us what kind of job you want. We will email you when matching jobs appear on our platform. It's completely free.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-question">Is it safe to use? Are there scams? <span class="arrow">▼</span></div>
+            <div class="faq-answer">We only aggregate jobs from trusted platforms. However, always verify job listings directly with the employer. Never pay money to apply for a job. If a job asks for payment, it's a scam. See our blog post on Remote Work Scams for more.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-question">Can I post a job on your platform? <span class="arrow">▼</span></div>
+            <div class="faq-answer">Not yet. We plan to add employer job posting features in the future. For now, we only aggregate jobs from trusted sources. Contact us if you're interested in sponsoring a listing.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-question">Do you have a mobile app? <span class="arrow">▼</span></div>
+            <div class="faq-answer">Not yet. Our website is fully mobile-optimized and works perfectly on phones. A native app is planned for later in 2026 or 2027.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-question">How can I contact you? <span class="arrow">▼</span></div>
+            <div class="faq-answer">Use the contact link in the footer of our homepage. You can also chat with RVJ AI (our built-in assistant) for instant answers to most questions.</div>
+        </div>
+    </section>
+
+    <!-- EMAIL SUBSCRIBE SECTION -->
+    <section class="subscribe-section" id="subscribeSection">
+        <div class="subscribe-inner">
+            <h2>📬 Get Job Alerts — Free Forever</h2>
+            <p>Tell us what you're looking for. We'll email you when matching remote jobs appear. No spam, ever.</p>
+            <div class="subscribe-form">
+                <input type="email" id="subEmail" placeholder="Your email address" required>
+                <input type="text" id="subPreference" placeholder="What job are you looking for? (e.g., customer service)" required>
+                <button id="subBtn" onclick="subscribeUser()">Subscribe — It's Free</button>
+            </div>
+            <div class="subscribe-status" id="subStatus"></div>
+            <p class="subscribe-privacy">🔒 We never share your email. Unsubscribe anytime.</p>
+        </div>
+    </section>
+
     <footer>
         <div class="footer-logo">R V J</div>
         <p class="footer-tagline">Find Remote Jobs Worldwide</p>
-                <div class="footer-links">
+        <div class="footer-links">
             <a href="/blog.html">Blog</a>
             <a href="/about.html">About</a>
             <a href="/privacy.html">Privacy Policy</a>
@@ -260,7 +401,9 @@
             jobs.forEach((job, index) => {
                 const card = document.createElement('div'); card.className = 'job-card';
                 const salary = job.salary && job.salary !== 'Not specified' ? job.salary : null;
+                const isSaved = localStorage.getItem('savedJob_' + job.apply_url) === 'true';
                 card.innerHTML = `
+                    <button class="job-save-btn ${isSaved ? 'saved' : ''}" onclick="event.stopPropagation(); saveJob('${job.apply_url}', this)" title="Save job">${isSaved ? '❤️' : '🤍'}</button>
                     <div>
                         <h2 class="job-title">${job.title || 'Untitled Job'}</h2>
                         <p class="job-company">${job.company || 'Unknown Company'}</p>
@@ -451,6 +594,96 @@
             renderJobs(filtered);
         }
 
+        function quickSearch(term) {
+            document.getElementById('searchInput').value = term;
+            filterJobs();
+            document.querySelector('.jobs-container').scrollIntoView({behavior: 'smooth', block: 'start'});
+        }
+
+        function scrollToSubscribe() {
+            document.querySelector('.subscribe-section').scrollIntoView({behavior: 'smooth'});
+            setTimeout(() => document.getElementById('subEmail').focus(), 800);
+        }
+
+        function saveJob(url, btn) {
+            const key = 'savedJob_' + url;
+            const isSaved = localStorage.getItem(key) === 'true';
+            const job = allJobs.find(j => j.apply_url === url);
+            
+            if (isSaved) {
+                localStorage.removeItem(key);
+                btn.classList.remove('saved');
+                btn.textContent = '🤍';
+            } else {
+                localStorage.setItem(key, 'true');
+                btn.classList.add('saved');
+                btn.textContent = '❤️';
+                
+                setTimeout(() => {
+                    if (confirm('✅ Job saved!\n\n💡 Want us to email you when new jobs like this appear?\n\nClick OK to subscribe (free) — or Cancel to keep browsing.')) {
+                        document.querySelector('.subscribe-section').scrollIntoView({behavior: 'smooth'});
+                        document.getElementById('subPreference').value = job.title || '';
+                        setTimeout(() => document.getElementById('subEmail').focus(), 800);
+                    }
+                }, 200);
+            }
+        }
+
+        function toggleFaq(el) {
+            el.classList.toggle('open');
+        }
+
+        async function subscribeUser() {
+            const email = document.getElementById('subEmail').value.trim();
+            const preference = document.getElementById('subPreference').value.trim();
+            const btn = document.getElementById('subBtn');
+            const status = document.getElementById('subStatus');
+
+            if (!email || !preference) {
+                status.textContent = '⚠️ Please fill in both fields.';
+                status.className = 'subscribe-status error';
+                return;
+            }
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                status.textContent = '⚠️ Please enter a valid email address.';
+                status.className = 'subscribe-status error';
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Subscribing...';
+            status.textContent = '';
+
+            try {
+                const { data, error } = await supabaseClient
+                    .from('subscribers')
+                    .insert([{ email: email.toLowerCase(), job_preference: preference }]);
+
+                if (error) {
+                    if (error.code === '23505') {
+                        status.textContent = '✅ You are already subscribed!';
+                        status.className = 'subscribe-status success';
+                    } else {
+                        throw error;
+                    }
+                } else {
+                    status.textContent = '🎉 Subscribed! We will email you when matching jobs appear.';
+                    status.className = 'subscribe-status success';
+                    document.getElementById('subEmail').value = '';
+                    document.getElementById('subPreference').value = '';
+                }
+            } catch (err) {
+                status.textContent = '❌ Something went wrong. Please try again.';
+                status.className = 'subscribe-status error';
+                console.error('Subscribe error:', err);
+            }
+
+            btn.disabled = false;
+            btn.textContent = 'Subscribe — It\'s Free';
+        }
+
         // ============ RVJ AI CHAT ============
         let rvjChatHistory = [];
         let rvjChatOpen = false;
@@ -522,7 +755,7 @@
             const container = document.getElementById('rvjChatMessages');
             const greeting = getRVJGreeting();
             container.innerHTML = `
-                    <div class="rvj-ai-welcome">
+                <div class="rvj-ai-welcome">
                     <div class="rvj-ai-welcome-icon">🤖</div>
                     <div class="rvj-ai-welcome-text">${greeting}</div>
                 </div>
