@@ -522,17 +522,19 @@
             const container = document.getElementById('rvjChatMessages');
             const greeting = getRVJGreeting();
             container.innerHTML = `
-                <div class="rvj-ai-welcome">
+                    <div class="rvj-ai-welcome">
                     <div class="rvj-ai-welcome-icon">🤖</div>
                     <div class="rvj-ai-welcome-text">${greeting}</div>
                 </div>
                 <div class="rvj-ai-quick">
-                    <button onclick="rvjQuickAsk('Give me interview tips')">💼 Interview tips</button>
+                    <button onclick="rvjQuickAsk('Help me find a job. Ask me about my skills and preferences first.')">💼 Find jobs</button>
+                    <button onclick="rvjQuickAsk('Give me interview tips')">🎤 Interview tips</button>
                     <button onclick="rvjQuickAsk('What are ATS keywords and how do I use them?')">🔑 ATS keywords</button>
                     <button onclick="rvjQuickAsk('How do I check my CV match for a job?')">✅ Check my match</button>
                     <button onclick="rvjQuickAsk('What courses should I take to improve my career?')">📚 Course ideas</button>
+                    <button onclick="rvjQuickAsk('Tell me about your career blog and what articles you have.')">📖 Career blog</button>
                 </div>
-            `;
+            `;       
         }
 
         function rvjQuickAsk(question) {
