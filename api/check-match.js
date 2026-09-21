@@ -25,21 +25,21 @@ Return ONLY a valid JSON object with this EXACT structure (no markdown, no extra
   "matchScore": <number 0-100>,
   "summary": "<2-3 sentences addressed directly to the user. Use 'Your CV...' NOT 'The user's CV...'. Be encouraging but honest. Explain the match level and the biggest opportunity for improvement.>",
   "yearsExperience": {
-    "detected": "<approximate years of experience detected in the CV, e.g. '3 years' or 'Not clearly stated'>",
-    "required": "<years of experience required by the job, e.g. '5+ years' or 'Not specified'>",
-    "verdict": "<one short sentence comparing them, e.g. 'Your experience is close to what they want.' or 'This role wants 2 more years than you have.'>"
+    "detected": "<approximate years of experience detected in the CV>",
+    "required": "<years of experience required by the job>",
+    "verdict": "<one short sentence comparing them>"
   },
   "whyItFits": ["<3-5 bullet points of strengths from the CV that match the job>"],
   "whyItDoesntFit": ["<3-5 bullet points of gaps — skills, experience, or keywords the job wants but the CV lacks>"],
   "topSkills": ["<3-5 top skills from the CV that are most relevant to this job>"],
   "matchedKeywords": ["<10-15 ATS keywords that appear in BOTH the job and the CV>"],
   "missingKeywords": ["<10-15 important ATS keywords from the job that are NOT in the CV>"],
-  "recommendation": "<one actionable sentence telling the user the next best step, e.g. 'Add Financial Technology and Product Strategy to your CV and highlight your 3 years of customer support experience.'>"
+  "recommendation": "<one actionable sentence telling the user the next best step>"
 }`;
 
   const errors = [];
 
-  // 1. Try Gemini
+  // 1. Try Gemini (Primary)
   try {
     const geminiKey = process.env.GEMINI_API_KEY;
     if (!geminiKey) throw new Error('GEMINI_API_KEY not set');
@@ -103,7 +103,69 @@ Return ONLY a valid JSON object with this EXACT structure (no markdown, no extra
     errors.push('Groq: ' + err.message);
   }
 
-  // 3. Try OpenRouter
+  // 3. Try Cerebras
+  try {
+    const cerebrasKey = process.env.CEREBRAS_API_KEY;
+    if (!cerebrasKey) throw new Error('CEREBRAS_API_KEY not set');
+    
+    const cerebrasResponse = await fetch('https://api.cerebras.ai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${cerebrasKey}`
+      },
+      body: JSON.stringify({
+        model: 'llama-3.3-70b',
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.3
+      })
+    });
+    const cerebrasData = await cerebrasResponse.json();
+    if (!cerebrasResponse.ok) {
+      throw new Error(`Cerebras ${cerebrasResponse.status}: ${JSON.stringify(cerebrasData).substring(0,200)}`);
+    }
+    const text = cerebrasData.choices?.[0]?.message?.content;
+    if (text) {
+      const clean = text.replace(/\`\`\`json|\`\`\`/g, '').trim();
+      return res.status(200).json({ provider: 'cerebras', ...JSON.parse(clean) });
+    }
+    throw new Error('Cerebras returned no text');
+  } catch (err) {
+    errors.push('Cerebras: ' + err.message);
+  }
+
+  // 4. Try Mistral
+  try {
+    const mistralKey = process.env.MISTRAL_API_KEY;
+    if (!mistralKey) throw new Error('MISTRAL_API_KEY not set');
+    
+    const mistralResponse = await fetch('https://api.mistral.ai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${mistralKey}`
+      },
+      body: JSON.stringify({
+        model: 'mistral-small-latest',
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.3
+      })
+    });
+    const mistralData = await mistralResponse.json();
+    if (!mistralResponse.ok) {
+      throw new Error(`Mistral ${mistralResponse.status}: ${JSON.stringify(mistralData).substring(0,200)}`);
+    }
+    const text = mistralData.choices?.[0]?.message?.content;
+    if (text) {
+      const clean = text.replace(/\`\`\`json|\`\`\`/g, '').trim();
+      return res.status(200).json({ provider: 'mistral', ...JSON.parse(clean) });
+    }
+    throw new Error('Mistral returned no text');
+  } catch (err) {
+    errors.push('Mistral: ' + err.message);
+  }
+
+  // 5. Try OpenRouter (Final fallback)
   try {
     const orKey = process.env.OPENROUTER_API_KEY;
     if (!orKey) throw new Error('OPENROUTER_API_KEY not set');
