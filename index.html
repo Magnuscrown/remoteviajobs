@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Remote Via Jobs - Find Remote Jobs Worldwide</title>
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -18,22 +18,16 @@
         .search-box { max-width: 600px; margin: 0 auto; }
         .search-box input { width: 100%; padding: 18px 25px; border-radius: 50px; border: none; font-size: 1rem; font-family: 'Inter', sans-serif; box-shadow: 0 10px 25px rgba(0,0,0,0.1); outline: none; }
         .jobs-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; max-width: 1200px; margin: 0 auto; padding: 0 20px 60px 20px; }
-        
-        /* ✅ FIXED: Job card hover with lift + shadow */
         .job-card { background: var(--white); padding: 25px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease; }
         .job-card:hover { transform: translateY(-8px); box-shadow: 0 20px 30px -5px rgba(11, 55, 99, 0.15), 0 10px 15px -5px rgba(11, 55, 99, 0.1); border-color: #cbd5e1; }
-        
         .job-title { font-size: 1.15rem; font-weight: 700; margin-bottom: 8px; }
         .job-company { font-size: 0.95rem; color: var(--primary-color); margin-bottom: 12px; }
         .job-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
         .job-tag { background: #f1f5f9; color: var(--text-light); font-size: 0.8rem; padding: 4px 10px; border-radius: 20px; font-weight: 500; }
         .job-salary { color: #10b981; font-weight: 600; }
-        
-        /* ✅ FIXED: View Details button hover color change */
         .view-details-btn { display: block; background: var(--primary-color); color: var(--white); padding: 12px 20px; border-radius: 10px; text-align: center; font-weight: 600; border: none; cursor: pointer; width: 100%; font-family: 'Inter', sans-serif; transition: background 0.25s ease, transform 0.1s ease; }
         .view-details-btn:hover { background: var(--accent-color); }
         .view-details-btn:active { transform: scale(0.98); }
-        
         .loading { text-align: center; font-size: 1.2rem; color: var(--text-light); padding: 40px; grid-column: 1 / -1; }
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(5px); z-index: 1000; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; }
         .modal-overlay.active { display: flex; }
@@ -47,27 +41,18 @@
         .modal-description h1, .modal-description h2, .modal-description h3, .modal-description h4 { margin-top: 20px; margin-bottom: 12px; font-weight: 700; color: #0f172a; }
         .modal-description ul, .modal-description ol { margin-bottom: 16px; padding-left: 20px; }
         .modal-description li { margin-bottom: 8px; }
-        
-        /* ✅ FIXED: Apply Now button hover */
         .modal-apply-btn { display: block; background: var(--primary-color); color: var(--white); padding: 15px 30px; border-radius: 12px; text-align: center; font-weight: 700; text-decoration: none; width: 100%; transition: background 0.25s ease, transform 0.1s ease; }
         .modal-apply-btn:hover { background: var(--accent-color); }
         .modal-apply-btn:active { transform: scale(0.98); }
-        
-        /* AI SECTION */
         .ai-section { background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 16px; padding: 25px; margin-bottom: 30px; }
         .ai-section h3 { font-size: 1.1rem; margin-bottom: 8px; color: var(--primary-color); }
         .ai-section p { font-size: 0.85rem; color: var(--text-light); margin-bottom: 15px; }
-        
-        /* ✅ NEW: Tabs for CV input */
         .cv-tabs { display: flex; gap: 8px; margin-bottom: 15px; background: #e2e8f0; padding: 5px; border-radius: 10px; }
         .cv-tab { flex: 1; padding: 8px 12px; border: none; background: transparent; border-radius: 8px; font-weight: 600; font-size: 0.85rem; cursor: pointer; color: var(--text-light); font-family: 'Inter', sans-serif; transition: all 0.2s; }
         .cv-tab.active { background: white; color: var(--primary-color); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
         .cv-panel { display: none; }
         .cv-panel.active { display: block; }
-        
         .ai-section textarea { width: 100%; min-height: 120px; padding: 12px; border: 1px solid #cbd5e1; border-radius: 10px; font-family: 'Inter', sans-serif; font-size: 0.9rem; resize: vertical; margin-bottom: 12px; }
-        
-        /* ✅ NEW: Drag & drop zone */
         .drop-zone { border: 2px dashed #cbd5e1; border-radius: 12px; padding: 30px 20px; text-align: center; cursor: pointer; background: white; transition: all 0.2s; margin-bottom: 12px; }
         .drop-zone:hover, .drop-zone.dragover { border-color: var(--accent-color); background: #eff6ff; }
         .drop-zone-icon { font-size: 2rem; margin-bottom: 8px; }
@@ -75,7 +60,6 @@
         .drop-zone strong { color: var(--primary-color); }
         .file-status { font-size: 0.85rem; color: #10b981; font-weight: 600; margin-top: 8px; text-align: center; display: none; }
         .file-status.active { display: block; }
-        
         .ai-btn { background: var(--accent-color); color: white; border: none; padding: 12px 25px; border-radius: 10px; font-weight: 600; cursor: pointer; width: 100%; font-family: 'Inter', sans-serif; font-size: 0.95rem; transition: background 0.2s; }
         .ai-btn:hover:not(:disabled) { background: #0093dd; }
         .ai-btn:disabled { opacity: 0.6; cursor: not-allowed; }
@@ -85,9 +69,9 @@
         .keyword-group { margin-bottom: 15px; }
         .keyword-group h4 { font-size: 0.9rem; margin-bottom: 8px; color: var(--text-dark); }
         .keyword-tag { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; margin: 3px; }
-                .keyword-tag.good { background: #dbeafe; color: #1e40af; }
+        .keyword-tag.good { background: #dbeafe; color: #1e40af; }
         .keyword-tag.missing { background: #d1fae5; color: #065f46; }
-                .info-box { background: #f8fafc; border-left: 4px solid #0B3763; border-radius: 10px; padding: 15px 18px; margin-bottom: 15px; }
+        .info-box { background: #f8fafc; border-left: 4px solid #0B3763; border-radius: 10px; padding: 15px 18px; margin-bottom: 15px; }
         .info-box h4 { font-size: 0.9rem; margin-bottom: 10px; color: #0B3763; }
         .info-box p { font-size: 0.85rem; margin-bottom: 5px; color: #475569; }
         .info-box ul { padding-left: 20px; margin: 0; }
@@ -101,7 +85,6 @@
         .recommendation-box h4 { font-size: 0.9rem; margin-bottom: 8px; color: #ffffff; }
         .recommendation-box p { font-size: 0.85rem; color: #e2e8f0; line-height: 1.6; }
         .privacy-footer { text-align: center; font-size: 0.72rem; color: #94a3b8; margin-top: 20px; padding-top: 15px; border-top: 1px dashed #cbd5e1; line-height: 1.7; }
-        
         footer { background: #0f172a; color: #94a3b8; padding: 50px 20px 30px 20px; text-align: center; }
         .footer-logo { font-size: 1.5rem; font-weight: 700; color: var(--white); margin-bottom: 15px; letter-spacing: 2px; }
         .footer-tagline { margin-bottom: 25px; color: #cbd5e1; }
@@ -109,7 +92,50 @@
         .footer-links a { color: #94a3b8; text-decoration: none; font-size: 0.9rem; }
         .footer-founder { font-size: 0.9rem; border-top: 1px solid #1e293b; padding-top: 20px; max-width: 400px; margin: 0 auto; }
         .footer-founder strong { color: var(--white); }
-        @media (max-width: 600px) { .hero h1 { font-size: 1.8rem; } .jobs-container { grid-template-columns: 1fr; } .cv-tab { font-size: 0.75rem; padding: 6px 8px; } }
+        
+        /* ===== RVJ AI CHAT WIDGET ===== */
+        .rvj-ai-wrapper { position: fixed; bottom: 24px; right: 24px; z-index: 999; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+        .rvj-ai-label { background: #0B3763; color: white; padding: 4px 12px; border-radius: 12px; font-size: 0.7rem; font-weight: 700; letter-spacing: 1px; box-shadow: 0 4px 10px rgba(11, 55, 99, 0.3); pointer-events: none; }
+        .rvj-ai-fab { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #0B3763 0%, #1e4b7a 100%); color: white; border: none; cursor: pointer; box-shadow: 0 8px 20px rgba(11, 55, 99, 0.4); font-size: 1.6rem; transition: transform 0.2s, box-shadow 0.2s; display: flex; align-items: center; justify-content: center; }
+        .rvj-ai-fab:hover { transform: scale(1.08); box-shadow: 0 12px 28px rgba(11, 55, 99, 0.5); }
+        .rvj-ai-fab:active { transform: scale(0.95); }
+        .rvj-ai-window { position: fixed; bottom: 100px; right: 24px; width: 380px; max-width: calc(100vw - 32px); height: 560px; max-height: calc(100vh - 140px); background: white; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); z-index: 1000; display: none; flex-direction: column; overflow: hidden; }
+        .rvj-ai-window.active { display: flex; animation: rvjSlideUp 0.3s ease; }
+        @keyframes rvjSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .rvj-ai-header { background: linear-gradient(135deg, #0B3763 0%, #1e4b7a 100%); color: white; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .rvj-ai-header-title { font-size: 1rem; font-weight: 700; letter-spacing: 0.5px; }
+        .rvj-ai-header-close { background: rgba(255,255,255,0.15); border: none; color: white; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+        .rvj-ai-header-close:hover { background: rgba(255,255,255,0.3); }
+        .rvj-ai-messages { flex: 1; overflow-y: auto; padding: 20px; background: #f8fafc; display: flex; flex-direction: column; gap: 12px; }
+        .rvj-ai-msg { max-width: 82%; padding: 12px 16px; border-radius: 16px; font-size: 0.9rem; line-height: 1.5; word-wrap: break-word; }
+        .rvj-ai-msg.user { align-self: flex-end; background: #0B3763; color: white; border-bottom-right-radius: 4px; }
+        .rvj-ai-msg.ai { align-self: flex-start; background: white; color: #1e293b; border: 1px solid #e2e8f0; border-bottom-left-radius: 4px; }
+        .rvj-ai-typing { display: inline-flex; gap: 4px; align-items: center; }
+        .rvj-ai-typing span { width: 6px; height: 6px; border-radius: 50%; background: #94a3b8; animation: rvjDot 1.4s infinite; }
+        .rvj-ai-typing span:nth-child(2) { animation-delay: 0.2s; }
+        .rvj-ai-typing span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes rvjDot { 0%, 60%, 100% { opacity: 0.3; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-3px); } }
+        .rvj-ai-welcome { text-align: center; padding: 20px 10px; }
+        .rvj-ai-welcome-icon { font-size: 3rem; margin-bottom: 15px; }
+        .rvj-ai-welcome-text { font-size: 1rem; font-weight: 600; color: #0B3763; margin-bottom: 10px; line-height: 1.5; }
+        .rvj-ai-quick { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; padding: 0 10px 15px; }
+        .rvj-ai-quick button { background: white; border: 1px solid #cbd5e1; color: #0B3763; padding: 8px 14px; border-radius: 20px; font-size: 0.78rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.2s; }
+        .rvj-ai-quick button:hover { background: #0B3763; color: white; border-color: #0B3763; }
+        .rvj-ai-input-area { padding: 12px 16px; background: white; border-top: 1px solid #e2e8f0; display: flex; gap: 8px; align-items: center; }
+        .rvj-ai-input { flex: 1; padding: 12px 16px; border: 1px solid #cbd5e1; border-radius: 25px; font-family: 'Inter', sans-serif; font-size: 0.9rem; outline: none; transition: border-color 0.2s; }
+        .rvj-ai-input:focus { border-color: #0B3763; }
+        .rvj-ai-send { background: #0B3763; color: white; border: none; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-size: 1rem; transition: background 0.2s, transform 0.1s; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .rvj-ai-send:hover { background: #00A8FF; }
+        .rvj-ai-send:active { transform: scale(0.95); }
+        .rvj-ai-send:disabled { opacity: 0.5; cursor: not-allowed; }
+        
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 1.8rem; }
+            .jobs-container { grid-template-columns: 1fr; }
+            .rvj-ai-wrapper { bottom: 90px; right: 16px; }
+            .rvj-ai-fab { width: 54px; height: 54px; font-size: 1.4rem; }
+            .rvj-ai-window { bottom: 155px; right: 16px; left: 16px; width: auto; height: calc(100vh - 240px); }
+        }
     </style>
 </head>
 <body>
@@ -134,20 +160,14 @@
             <div class="ai-section">
                 <h3>🤖 AI Match Checker</h3>
                 <p>Add your CV to see your match score and keywords to add.</p>
-                
-                <!-- ✅ NEW TABS -->
                 <div class="cv-tabs">
                     <button class="cv-tab active" onclick="switchTab('paste')">📝 Paste Text</button>
                     <button class="cv-tab" onclick="switchTab('upload')">📁 Upload File</button>
                     <button class="cv-tab" onclick="switchTab('drop')">📥 Drag & Drop</button>
                 </div>
-                
-                <!-- Panel 1: Paste Text -->
                 <div class="cv-panel active" id="panel-paste">
                     <textarea id="cvInput" placeholder="Paste your CV text here..."></textarea>
                 </div>
-                
-                <!-- Panel 2: Upload File -->
                 <div class="cv-panel" id="panel-upload">
                     <input type="file" id="cvFileInput" accept=".pdf,.txt,.doc,.docx" style="display:none;" onchange="handleFileUpload(event)">
                     <div class="drop-zone" onclick="document.getElementById('cvFileInput').click()">
@@ -156,8 +176,6 @@
                         <p style="font-size:0.75rem; margin-top:5px;">Supports PDF, TXT, DOC, DOCX</p>
                     </div>
                 </div>
-                
-                <!-- Panel 3: Drag & Drop -->
                 <div class="cv-panel" id="panel-drop">
                     <div class="drop-zone" id="dropZone">
                         <div class="drop-zone-icon">📥</div>
@@ -165,7 +183,6 @@
                         <p style="font-size:0.75rem; margin-top:5px;">Supports PDF, TXT, DOC, DOCX</p>
                     </div>
                 </div>
-                
                 <div class="file-status" id="fileStatus"></div>
                 <button class="ai-btn" id="checkMatchBtn" onclick="checkMatch()">Check My Match</button>
                 <div class="ai-result" id="aiResult"></div>
@@ -182,7 +199,6 @@
             <a href="/about.html">About</a>
             <a href="/privacy.html">Privacy Policy</a>
             <a href="/terms.html">Terms of Service</a>
-            <a href="/contact.html">Contact Us</a>
         </div>
         <div class="footer-founder">
             <p><strong>Magnus Crown</strong> | Founder & CEO</p>
@@ -190,12 +206,28 @@
         </div>
     </footer>
 
+    <!-- RVJ AI CHAT WIDGET -->
+    <div class="rvj-ai-wrapper">
+        <span class="rvj-ai-label">RVJ AI</span>
+        <button class="rvj-ai-fab" onclick="toggleRVJChat()" title="Chat with RVJ AI">🤖</button>
+    </div>
+    
+    <div class="rvj-ai-window" id="rvjChatWindow">
+        <div class="rvj-ai-header">
+            <span class="rvj-ai-header-title">REMOTE VIA JOBS AI</span>
+            <button class="rvj-ai-header-close" onclick="toggleRVJChat()">✕</button>
+        </div>
+        <div class="rvj-ai-messages" id="rvjChatMessages"></div>
+        <div class="rvj-ai-input-area">
+            <input type="text" class="rvj-ai-input" id="rvjChatInput" placeholder="Ask me anything..." onkeypress="if(event.key==='Enter') sendRVJChat()">
+            <button class="rvj-ai-send" id="rvjChatSendBtn" onclick="sendRVJChat()">➤</button>
+        </div>
+    </div>
+
     <script>
-        // Set PDF.js worker
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
         const SUPABASE_URL = 'https://xsuqoebwpuxnhjpjzysv.supabase.co';
-        // 🚨 PASTE YOUR SUPABASE ANON KEY BELOW 🚨
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzdXFvZWJ3cHV4bmhqcGp6eXN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk1OTg4NjQsImV4cCI6MjEwNTE3NDg2NH0.fVRP2mQU_yExjbTvUJzbsHCTQnIa2JBUJcidozSIxCQ';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         
@@ -207,13 +239,14 @@
             const { data, error } = await supabaseClient.from('jobs').select('*').order('created_at', { ascending: false });
             if (error) { document.getElementById('loading').innerText = 'Error loading jobs.'; return; }
             allJobs = data.filter(job => 
-              job.title && job.title.trim() !== '' &&
-              job.apply_url && job.apply_url.trim() !== '' &&
-              job.company && job.company.trim() !== '' &&
-              !job.apply_url.includes('#') &&
-              !job.apply_url.includes('remoteviajobs')
+                job.title && job.title.trim() !== '' &&
+                job.apply_url && job.apply_url.trim() !== '' &&
+                job.company && job.company.trim() !== '' &&
+                !job.apply_url.includes('#') &&
+                !job.apply_url.includes('remoteviajobs')
             );
-            document.getElementById('loading').style.display = 'none'; renderJobs(allJobs);
+            document.getElementById('loading').style.display = 'none';
+            renderJobs(allJobs);
         }
 
         function renderJobs(jobs) {
@@ -250,8 +283,6 @@
             `;
             document.getElementById('modalDescription').innerHTML = job.description || 'No description available.';
             document.getElementById('modalApplyBtn').href = job.apply_url || '#';
-            
-            // Reset CV section
             document.getElementById('cvInput').value = '';
             document.getElementById('aiResult').classList.remove('active');
             document.getElementById('aiResult').innerHTML = '';
@@ -259,7 +290,6 @@
             document.getElementById('fileStatus').textContent = '';
             extractedCVText = '';
             switchTab('paste');
-            
             document.getElementById('jobModal').classList.add('active');
             document.body.style.overflow = 'hidden';
             requestAnimationFrame(() => { document.querySelector('.modal-content').scrollTop = 0; });
@@ -270,7 +300,6 @@
             document.body.style.overflow = 'auto';
         }
 
-        // ✅ NEW: Tab switching
         function switchTab(tab) {
             document.querySelectorAll('.cv-tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.cv-panel').forEach(p => p.classList.remove('active'));
@@ -282,20 +311,17 @@
             document.getElementById('panel-' + tab).classList.add('active');
         }
 
-        // ✅ NEW: File upload handler
         async function handleFileUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
             await processFile(file);
         }
 
-        // ✅ NEW: Process PDF, TXT, DOC
         async function processFile(file) {
             const status = document.getElementById('fileStatus');
             status.classList.add('active');
             status.style.color = '#3b82f6';
             status.textContent = '📄 Reading file...';
-            
             try {
                 let text = '';
                 if (file.name.toLowerCase().endsWith('.pdf')) {
@@ -307,7 +333,6 @@
                         text += content.items.map(item => item.str).join(' ') + '\n';
                     }
                 } else {
-                    // TXT, DOC, DOCX treated as text (DOC/DOCX will have some junk but works)
                     text = await file.text();
                 }
                 extractedCVText = text;
@@ -320,7 +345,6 @@
             }
         }
 
-        // ✅ NEW: Drag & drop
         const dropZone = document.getElementById('dropZone');
         if (dropZone) {
             ['dragenter', 'dragover'].forEach(evt => {
@@ -355,7 +379,7 @@
                 });
                 const data = await response.json();
                 if (data.error) {
-                                        console.error('AI Error Details:', data.details || data.error);
+                    console.error('AI Error Details:', data.details || data.error);
                     result.innerHTML = `
                         <div style="text-align:center; padding:20px;">
                             <p style="font-size:2rem; margin-bottom:10px;">😴</p>
@@ -367,7 +391,6 @@
                     result.innerHTML = `
                         <div class="match-score">${data.matchScore}% Match</div>
                         <p style="text-align:center; margin-bottom:20px; font-size:0.9rem; color:#475569; line-height:1.6;">${data.summary || ''}</p>
-                        
                         ${data.yearsExperience ? `
                         <div class="info-box">
                             <h4>📊 Experience Check</h4>
@@ -375,43 +398,36 @@
                             <p><strong>Job requires:</strong> ${data.yearsExperience.required || 'N/A'}</p>
                             <p style="color:#0B3763; font-weight:600; margin-top:8px;">${data.yearsExperience.verdict || ''}</p>
                         </div>` : ''}
-                        
                         ${data.topSkills && data.topSkills.length ? `
                         <div class="info-box">
                             <h4>⭐ Your Top Relevant Skills</h4>
                             <div>${data.topSkills.map(s => `<span class="keyword-tag skill">${s}</span>`).join('')}</div>
                         </div>` : ''}
-                        
                         ${data.whyItFits && data.whyItFits.length ? `
                         <div class="info-box fits">
                             <h4>✅ Why Your CV Fits</h4>
                             <ul>${data.whyItFits.map(item => `<li>${item}</li>`).join('')}</ul>
                         </div>` : ''}
-                        
                         ${data.whyItDoesntFit && data.whyItDoesntFit.length ? `
                         <div class="info-box doesnt-fit">
                             <h4>⚠️ Why Your CV Doesn't Fully Fit</h4>
                             <ul>${data.whyItDoesntFit.map(item => `<li>${item}</li>`).join('')}</ul>
                         </div>` : ''}
-                        
-                                                ${data.matchedKeywords && data.matchedKeywords.length ? `
+                        ${data.matchedKeywords && data.matchedKeywords.length ? `
                         <div class="keyword-group">
                             <h4>✅ ATS Keywords in Your CV (${data.matchedKeywords.length})</h4>
                             ${data.matchedKeywords.map(k => `<span class="keyword-tag good">${k}</span>`).join('')}
                         </div>` : ''}
-                        
                         ${data.missingKeywords && data.missingKeywords.length ? `
                         <div class="keyword-group">
                             <h4>➕ ATS Keywords to Add (${data.missingKeywords.length})</h4>
                             ${data.missingKeywords.map(k => `<span class="keyword-tag missing">${k}</span>`).join('')}
                         </div>` : ''}
-                        
                         ${data.recommendation ? `
                         <div class="recommendation-box">
                             <h4>💡 Next Step</h4>
                             <p>${data.recommendation}</p>
                         </div>` : ''}
-                        
                         <div class="privacy-footer">
                             🔒 Your CV is never saved or stored. It's analyzed and deleted instantly.<br>
                             ⚡ Powered by AI • 100% Free • No signup needed
@@ -429,6 +445,152 @@
             const filtered = allJobs.filter(job => (job.title && job.title.toLowerCase().includes(query)) || (job.company && job.company.toLowerCase().includes(query)) || (job.location && job.location.toLowerCase().includes(query)));
             renderJobs(filtered);
         }
+
+        // ============ RVJ AI CHAT ============
+        let rvjChatHistory = [];
+        let rvjChatOpen = false;
+        let rvjChatWelcomeShown = false;
+        let rvjCloseTime = 0;
+        const RVJ_TIMEOUT_MS = 10 * 60 * 1000;
+
+        const rvjGreetings = [
+            "Hi! How may I help you today?",
+            "Welcome to Remote Via Jobs! Ready to find your dream remote job?",
+            "Hello! I'm your career assistant. What can I help you with?",
+            "Hey there! Looking for remote work? Let's talk.",
+            "Welcome back! What's on your mind today?",
+            "Hi! I can help with your CV, interviews, and job search.",
+            "Hey! Ready to level up your remote career?",
+            "Hello! Let's find you a great remote job.",
+            "Welcome! Ask me anything about remote work.",
+            "Hi! Need help with your job search or CV?",
+            "Hey there! I'm RVJ AI — how can I help?",
+            "Hello! Let's build your remote career together.",
+            "Welcome! What can I help you with today?",
+            "Hi! I'm here to help with jobs, CVs, and interviews.",
+            "Hey! Ready to find your next remote opportunity?",
+            "Hello! What would you like help with?",
+            "Welcome to Remote Via Jobs! How can I assist?",
+            "Hi! Let's make your job search easier.",
+            "Hey! Ask me anything career-related.",
+            "Hello! I'm here 24/7 to help with your career.",
+            "Welcome! Ready to apply for your dream job?",
+            "Hi! What remote job are you looking for?",
+            "Hey there! Need CV tips or interview prep?",
+            "Hello! Let's get you hired.",
+            "Welcome! Your career journey starts here.",
+            "Hi! Ask me about jobs, skills, or courses.",
+            "Hey! I can help you grow your career. What do you need?",
+            "Hello! What's your next career goal?",
+            "Welcome! Let's find the right job for you.",
+            "Hi! I'm RVJ AI, your personal career assistant."
+        ];
+
+        function getRVJGreeting() {
+            return rvjGreetings[Math.floor(Math.random() * rvjGreetings.length)];
+        }
+
+        function toggleRVJChat() {
+            const win = document.getElementById('rvjChatWindow');
+            const now = Date.now();
+            if (win.classList.contains('active')) {
+                win.classList.remove('active');
+                rvjChatOpen = false;
+                rvjCloseTime = now;
+            } else {
+                win.classList.add('active');
+                rvjChatOpen = true;
+                if (rvjCloseTime && (now - rvjCloseTime) > RVJ_TIMEOUT_MS) {
+                    rvjChatHistory = [];
+                    rvjChatWelcomeShown = false;
+                    document.getElementById('rvjChatMessages').innerHTML = '';
+                }
+                if (!rvjChatWelcomeShown) {
+                    rvjChatWelcomeShown = true;
+                    showRVJWelcome();
+                }
+                setTimeout(() => document.getElementById('rvjChatInput').focus(), 200);
+            }
+        }
+
+        function showRVJWelcome() {
+            const container = document.getElementById('rvjChatMessages');
+            const greeting = getRVJGreeting();
+            container.innerHTML = `
+                <div class="rvj-ai-welcome">
+                    <div class="rvj-ai-welcome-icon">🤖</div>
+                    <div class="rvj-ai-welcome-text">${greeting}</div>
+                </div>
+                <div class="rvj-ai-quick">
+                    <button onclick="rvjQuickAsk('Give me interview tips')">💼 Interview tips</button>
+                    <button onclick="rvjQuickAsk('What are ATS keywords and how do I use them?')">🔑 ATS keywords</button>
+                    <button onclick="rvjQuickAsk('How do I check my CV match for a job?')">✅ Check my match</button>
+                    <button onclick="rvjQuickAsk('What courses should I take to improve my career?')">📚 Course ideas</button>
+                </div>
+            `;
+        }
+
+        function rvjQuickAsk(question) {
+            document.getElementById('rvjChatInput').value = question;
+            sendRVJChat();
+        }
+
+        function rvjAddMsg(text, role) {
+            const container = document.getElementById('rvjChatMessages');
+            const welcome = container.querySelector('.rvj-ai-welcome');
+            const quick = container.querySelector('.rvj-ai-quick');
+            if (welcome) welcome.remove();
+            if (quick) quick.remove();
+            const msg = document.createElement('div');
+            msg.className = 'rvj-ai-msg ' + role;
+            msg.textContent = text;
+            container.appendChild(msg);
+            container.scrollTop = container.scrollHeight;
+            return msg;
+        }
+
+        function rvjAddTyping() {
+            const container = document.getElementById('rvjChatMessages');
+            const msg = document.createElement('div');
+            msg.className = 'rvj-ai-msg ai';
+            msg.innerHTML = '<div class="rvj-ai-typing"><span></span><span></span><span></span></div>';
+            container.appendChild(msg);
+            container.scrollTop = container.scrollHeight;
+            return msg;
+        }
+
+        async function sendRVJChat() {
+            const input = document.getElementById('rvjChatInput');
+            const btn = document.getElementById('rvjChatSendBtn');
+            const text = input.value.trim();
+            if (!text || btn.disabled) return;
+            rvjAddMsg(text, 'user');
+            rvjChatHistory.push({ role: 'user', content: text });
+            input.value = '';
+            btn.disabled = true;
+            const typing = rvjAddTyping();
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ messages: rvjChatHistory })
+                });
+                const data = await response.json();
+                typing.remove();
+                if (data.reply) {
+                    rvjAddMsg(data.reply, 'ai');
+                    rvjChatHistory.push({ role: 'assistant', content: data.reply });
+                } else {
+                    rvjAddMsg('Sorry, I had a problem. Please try again.', 'ai');
+                }
+            } catch (err) {
+                typing.remove();
+                rvjAddMsg('Sorry, I had a problem. Please try again.', 'ai');
+            }
+            btn.disabled = false;
+            input.focus();
+        }
+
         fetchJobs();
     </script>
 </body>
