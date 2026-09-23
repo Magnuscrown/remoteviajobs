@@ -278,4 +278,561 @@
 
         <div class="faq-item" onclick="toggleFaq(this)">
             <div class="faq-question">Do you save my CV? <span class="arrow">▼</span></div>
-            <div class="faq-answer">Absolutely not. Your CV is sent securely to our AI
+            <div class="faq-answer">Absolutely not. Your CV is sent securely to our AI partners, analyzed in real-time, and immediately deleted. We never store, save, or share your CV. It disappears as soon as you close the browser.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-question">Where do the jobs come from? <span class="arrow">▼</span></div>
+            <div class="faq-answer">We aggregate remote job listings from trusted global job platforms. Every listing links directly to the original source where you can apply. We update our job board every 24 hours automatically.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-question">How often are new jobs added? <span class="arrow">▼</span></div>
+            <div class="faq-answer">Every 24 hours. Our system automatically fetches new remote jobs from multiple trusted sources at midnight daily. Jobs expire after 14 days to keep our listings fresh.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-question">Can I apply directly on your website? <span class="arrow">▼</span></div>
+            <div class="faq-answer">No. Remote Via Jobs is a job aggregator. When you click "Apply Now," we redirect you to the original job source (the company's career page or the platform where the job was posted) so you can apply there.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-question">Do you offer job alerts? <span class="arrow">▼</span></div>
+            <div class="faq-answer">Yes! Subscribe with your email and tell us what kind of job you want. We will email you when matching jobs appear on our platform. It's completely free.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-question">Is it safe to use? Are there scams? <span class="arrow">▼</span></div>
+            <div class="faq-answer">We only aggregate jobs from trusted platforms. However, always verify job listings directly with the employer. Never pay money to apply for a job. If a job asks for payment, it's a scam. See our blog post on Remote Work Scams for more.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-question">Can I post a job on your platform? <span class="arrow">▼</span></div>
+            <div class="faq-answer">Not yet. We plan to add employer job posting features in the future. For now, we only aggregate jobs from trusted sources. Contact us if you're interested in sponsoring a listing.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-question">Do you have a mobile app? <span class="arrow">▼</span></div>
+            <div class="faq-answer">Not yet. Our website is fully mobile-optimized and works perfectly on phones. A native app is planned for later in 2026 or 2027.</div>
+        </div>
+
+        <div class="faq-item" onclick="toggleFaq(this)">
+            <div class="faq-question">How can I contact you? <span class="arrow">▼</span></div>
+            <div class="faq-answer">Use the contact link in the footer of our homepage. You can also chat with RVJ AI (our built-in assistant) for instant answers to most questions.</div>
+        </div>
+    </section>
+
+    <!-- EMAIL SUBSCRIBE SECTION -->
+    <section class="subscribe-section" id="subscribeSection">
+        <div class="subscribe-inner">
+            <h2>📬 Get Job Alerts — Free Forever</h2>
+            <p>Tell us what you're looking for. We'll email you when matching remote jobs appear. No spam, ever.</p>
+            <div class="subscribe-form">
+                <input type="email" id="subEmail" placeholder="Your email address" required>
+                <input type="text" id="subPreference" placeholder="What job are you looking for? (e.g., customer service)" required>
+                <button id="subBtn" onclick="subscribeUser()">Subscribe — It's Free</button>
+            </div>
+            <div class="subscribe-status" id="subStatus"></div>
+            <p class="subscribe-privacy">🔒 We never share your email. Unsubscribe anytime.</p>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-logo">R V J</div>
+        <p class="footer-tagline">Find Remote Jobs Worldwide</p>
+        <div class="footer-links">
+            <a href="/blog.html">Blog</a>
+            <a href="/about.html">About</a>
+            <a href="/privacy.html">Privacy Policy</a>
+            <a href="/terms.html">Terms of Service</a>
+        </div>
+        <div class="footer-founder">
+            <p><strong>Magnus Crown</strong> | Founder & CEO</p>
+            <p style="margin-top: 5px;">© 2026 Remote Via Jobs. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- RVJ AI CHAT WIDGET -->
+    <div class="rvj-ai-wrapper">
+        <span class="rvj-ai-label">RVJ AI</span>
+        <button class="rvj-ai-fab" onclick="toggleRVJChat()" title="Chat with RVJ AI">🤖</button>
+    </div>
+    
+    <div class="rvj-ai-window" id="rvjChatWindow">
+        <div class="rvj-ai-header">
+            <span class="rvj-ai-header-title">REMOTE VIA JOBS AI</span>
+            <button class="rvj-ai-header-close" onclick="toggleRVJChat()">✕</button>
+        </div>
+        <div class="rvj-ai-messages" id="rvjChatMessages"></div>
+        <div class="rvj-ai-input-area">
+            <input type="text" class="rvj-ai-input" id="rvjChatInput" placeholder="Ask me anything..." onkeypress="if(event.key==='Enter') sendRVJChat()">
+            <button class="rvj-ai-send" id="rvjChatSendBtn" onclick="sendRVJChat()">➤</button>
+        </div>
+    </div>
+
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+        const SUPABASE_URL = 'https://xsuqoebwpuxnhjpjzysv.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzdXFvZWJ3cHV4bmhqcGp6eXN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk1OTg4NjQsImV4cCI6MjEwNTE3NDg2NH0.fVRP2mQU_yExjbTvUJzbsHCTQnIa2JBUJcidozSIxCQ';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        let allJobs = [];
+        let currentJobIndex = null;
+        let extractedCVText = '';
+
+        async function fetchJobs() {
+            const { data, error } = await supabaseClient.from('jobs').select('*').order('created_at', { ascending: false });
+            if (error) { document.getElementById('loading').innerText = 'Error loading jobs.'; return; }
+            allJobs = data.filter(job => 
+                job.title && job.title.trim() !== '' &&
+                job.apply_url && job.apply_url.trim() !== '' &&
+                job.company && job.company.trim() !== '' &&
+                !job.apply_url.includes('#') &&
+                !job.apply_url.includes('remoteviajobs')
+            );
+            document.getElementById('loading').style.display = 'none';
+            renderJobs(allJobs);
+        }
+
+        function renderJobs(jobs) {
+            const container = document.getElementById('jobsContainer'); container.innerHTML = '';
+            if (jobs.length === 0) { container.innerHTML = '<p style="text-align:center; grid-column: 1/-1;">No jobs found.</p>'; return; }
+            jobs.forEach((job, index) => {
+                const card = document.createElement('div'); card.className = 'job-card';
+                const salary = job.salary && job.salary !== 'Not specified' ? job.salary : null;
+                const isSaved = localStorage.getItem('savedJob_' + job.apply_url) === 'true';
+                card.innerHTML = `
+                    <button class="job-save-btn ${isSaved ? 'saved' : ''}" onclick="event.stopPropagation(); saveJob('${job.apply_url}', this)" title="Save job">${isSaved ? '❤️' : '🤍'}</button>
+                    <div>
+                        <h2 class="job-title">${job.title || 'Untitled Job'}</h2>
+                        <p class="job-company">${job.company || 'Unknown Company'}</p>
+                        <div class="job-meta">
+                            <span class="job-tag">📍 ${job.location || 'Remote'}</span>
+                            ${salary ? `<span class="job-tag job-salary">💰 ${salary}</span>` : ''}
+                        </div>
+                    </div>
+                    <button class="view-details-btn" onclick="openModal(${index})">View Details</button>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function openModal(index) {
+            currentJobIndex = index;
+            const job = allJobs[index];
+            if (!job) return;
+            document.getElementById('modalTitle').textContent = job.title || 'Untitled Job';
+            document.getElementById('modalCompany').textContent = job.company || 'Unknown Company';
+            document.getElementById('modalMeta').innerHTML = `
+                <span class="job-tag">📍 ${job.location || 'Remote'}</span>
+                ${job.salary && job.salary !== 'Not specified' ? `<span class="job-tag job-salary">💰 ${job.salary}</span>` : ''}
+                ${job.source ? `<span class="job-tag">Source: ${job.source}</span>` : ''}
+            `;
+            document.getElementById('modalDescription').innerHTML = job.description || 'No description available.';
+            document.getElementById('modalApplyBtn').href = job.apply_url || '#';
+            document.getElementById('cvInput').value = '';
+            document.getElementById('aiResult').classList.remove('active');
+            document.getElementById('aiResult').innerHTML = '';
+            document.getElementById('fileStatus').classList.remove('active');
+            document.getElementById('fileStatus').textContent = '';
+            extractedCVText = '';
+            switchTab('paste');
+            document.getElementById('jobModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            requestAnimationFrame(() => { document.querySelector('.modal-content').scrollTop = 0; });
+        }
+
+        function closeModal() {
+            document.getElementById('jobModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.cv-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.cv-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.cv-tab').forEach(t => {
+                if (t.textContent.toLowerCase().includes(tab === 'paste' ? 'paste' : tab === 'upload' ? 'upload' : 'drag')) {
+                    t.classList.add('active');
+                }
+            });
+            document.getElementById('panel-' + tab).classList.add('active');
+        }
+
+        async function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            await processFile(file);
+        }
+
+        async function processFile(file) {
+            const status = document.getElementById('fileStatus');
+            status.classList.add('active');
+            status.style.color = '#3b82f6';
+            status.textContent = '📄 Reading file...';
+            try {
+                let text = '';
+                if (file.name.toLowerCase().endsWith('.pdf')) {
+                    const arrayBuffer = await file.arrayBuffer();
+                    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+                    for (let i = 1; i <= pdf.numPages; i++) {
+                        const page = await pdf.getPage(i);
+                        const content = await page.getTextContent();
+                        text += content.items.map(item => item.str).join(' ') + '\n';
+                    }
+                } else {
+                    text = await file.text();
+                }
+                extractedCVText = text;
+                document.getElementById('cvInput').value = text;
+                status.style.color = '#10b981';
+                status.textContent = `✅ CV loaded: ${file.name} (${text.length} characters)`;
+            } catch (err) {
+                status.style.color = '#ef4444';
+                status.textContent = '❌ Error reading file. Try pasting your CV text instead.';
+            }
+        }
+
+        const dropZone = document.getElementById('dropZone');
+        if (dropZone) {
+            ['dragenter', 'dragover'].forEach(evt => {
+                dropZone.addEventListener(evt, (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
+            });
+            ['dragleave', 'drop'].forEach(evt => {
+                dropZone.addEventListener(evt, (e) => { e.preventDefault(); dropZone.classList.remove('dragover'); });
+            });
+            dropZone.addEventListener('drop', async (e) => {
+                const file = e.dataTransfer.files[0];
+                if (file) await processFile(file);
+            });
+        }
+
+        document.getElementById('jobModal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+        document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeModal(); });
+
+        async function checkMatch() {
+            const cv = document.getElementById('cvInput').value.trim() || extractedCVText.trim();
+            if (!cv) { alert('Please paste, upload, or drop your CV first.'); return; }
+            const job = allJobs[currentJobIndex];
+            const btn = document.getElementById('checkMatchBtn');
+            const result = document.getElementById('aiResult');
+            btn.disabled = true; btn.textContent = 'Analyzing...';
+            result.classList.add('active');
+            result.innerHTML = '<p style="text-align:center;">🤖 AI is reading your CV... (10-20 seconds)</p>';
+            try {
+                const response = await fetch('/api/check-match', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ jobDescription: job.description || job.title, userCV: cv })
+                });
+                const data = await response.json();
+                if (data.error) {
+                    console.error('AI Error Details:', data.details || data.error);
+                    result.innerHTML = `
+                        <div style="text-align:center; padding:20px;">
+                            <p style="font-size:2rem; margin-bottom:10px;">😴</p>
+                            <p style="color:#64748b; font-weight:600; margin-bottom:5px;">AI is taking a short break</p>
+                            <p style="color:#94a3b8; font-size:0.85rem;">Please try again in a few moments.</p>
+                        </div>
+                    `;
+                } else {
+                    result.innerHTML = `
+                        <div class="match-score">${data.matchScore}% Match</div>
+                        <p style="text-align:center; margin-bottom:20px; font-size:0.9rem; color:#475569; line-height:1.6;">${data.summary || ''}</p>
+                        ${data.yearsExperience ? `
+                        <div class="info-box">
+                            <h4>📊 Experience Check</h4>
+                            <p><strong>Your CV:</strong> ${data.yearsExperience.detected || 'N/A'}</p>
+                            <p><strong>Job requires:</strong> ${data.yearsExperience.required || 'N/A'}</p>
+                            <p style="color:#0B3763; font-weight:600; margin-top:8px;">${data.yearsExperience.verdict || ''}</p>
+                        </div>` : ''}
+                        ${data.topSkills && data.topSkills.length ? `
+                        <div class="info-box">
+                            <h4>⭐ Your Top Relevant Skills</h4>
+                            <div>${data.topSkills.map(s => `<span class="keyword-tag skill">${s}</span>`).join('')}</div>
+                        </div>` : ''}
+                        ${data.whyItFits && data.whyItFits.length ? `
+                        <div class="info-box fits">
+                            <h4>✅ Why Your CV Fits</h4>
+                            <ul>${data.whyItFits.map(item => `<li>${item}</li>`).join('')}</ul>
+                        </div>` : ''}
+                        ${data.whyItDoesntFit && data.whyItDoesntFit.length ? `
+                        <div class="info-box doesnt-fit">
+                            <h4>⚠️ Why Your CV Doesn't Fully Fit</h4>
+                            <ul>${data.whyItDoesntFit.map(item => `<li>${item}</li>`).join('')}</ul>
+                        </div>` : ''}
+                        ${data.matchedKeywords && data.matchedKeywords.length ? `
+                        <div class="keyword-group">
+                            <h4>✅ ATS Keywords in Your CV (${data.matchedKeywords.length})</h4>
+                            ${data.matchedKeywords.map(k => `<span class="keyword-tag good">${k}</span>`).join('')}
+                        </div>` : ''}
+                        ${data.missingKeywords && data.missingKeywords.length ? `
+                        <div class="keyword-group">
+                            <h4>➕ ATS Keywords to Add (${data.missingKeywords.length})</h4>
+                            ${data.missingKeywords.map(k => `<span class="keyword-tag missing">${k}</span>`).join('')}
+                        </div>` : ''}
+                        ${data.recommendation ? `
+                        <div class="recommendation-box">
+                            <h4>💡 Next Step</h4>
+                            <p>${data.recommendation}</p>
+                        </div>` : ''}
+                        <div class="privacy-footer">
+                            🔒 Your CV is never saved or stored. It's analyzed and deleted instantly.<br>
+                            ⚡ Powered by AI • 100% Free • No signup needed
+                        </div>
+                    `;
+                }
+            } catch (err) {
+                result.innerHTML = `<p style="color:red;">Error: ${err.message}</p>`;
+            }
+            btn.disabled = false; btn.textContent = 'Check My Match';
+        }
+
+        function filterJobs() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = allJobs.filter(job => (job.title && job.title.toLowerCase().includes(query)) || (job.company && job.company.toLowerCase().includes(query)) || (job.location && job.location.toLowerCase().includes(query)));
+            renderJobs(filtered);
+        }
+
+        function quickSearch(term) {
+            document.getElementById('searchInput').value = term;
+            filterJobs();
+            document.querySelector('.jobs-container').scrollIntoView({behavior: 'smooth', block: 'start'});
+        }
+
+        function scrollToSubscribe() {
+            document.querySelector('.subscribe-section').scrollIntoView({behavior: 'smooth'});
+            setTimeout(() => document.getElementById('subEmail').focus(), 800);
+        }
+
+        function saveJob(url, btn) {
+            const key = 'savedJob_' + url;
+            const isSaved = localStorage.getItem(key) === 'true';
+            const job = allJobs.find(j => j.apply_url === url);
+            
+            if (isSaved) {
+                localStorage.removeItem(key);
+                btn.classList.remove('saved');
+                btn.textContent = '🤍';
+            } else {
+                localStorage.setItem(key, 'true');
+                btn.classList.add('saved');
+                btn.textContent = '❤️';
+                
+                setTimeout(() => {
+                    if (confirm('✅ Job saved!\n\n💡 Want us to email you when new jobs like this appear?\n\nClick OK to subscribe (free) — or Cancel to keep browsing.')) {
+                        document.querySelector('.subscribe-section').scrollIntoView({behavior: 'smooth'});
+                        document.getElementById('subPreference').value = job.title || '';
+                        setTimeout(() => document.getElementById('subEmail').focus(), 800);
+                    }
+                }, 200);
+            }
+        }
+
+        function toggleFaq(el) {
+            el.classList.toggle('open');
+        }
+
+        async function subscribeUser() {
+            const email = document.getElementById('subEmail').value.trim();
+            const preference = document.getElementById('subPreference').value.trim();
+            const btn = document.getElementById('subBtn');
+            const status = document.getElementById('subStatus');
+
+            if (!email || !preference) {
+                status.textContent = '⚠️ Please fill in both fields.';
+                status.className = 'subscribe-status error';
+                return;
+            }
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                status.textContent = '⚠️ Please enter a valid email address.';
+                status.className = 'subscribe-status error';
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Subscribing...';
+            status.textContent = '';
+
+            try {
+                const { data, error } = await supabaseClient
+                    .from('subscribers')
+                    .insert([{ email: email.toLowerCase(), job_preference: preference }]);
+
+                if (error) {
+                    if (error.code === '23505') {
+                        status.textContent = '✅ You are already subscribed!';
+                        status.className = 'subscribe-status success';
+                    } else {
+                        throw error;
+                    }
+                } else {
+                    status.textContent = '🎉 Subscribed! We will email you when matching jobs appear.';
+                    status.className = 'subscribe-status success';
+                    document.getElementById('subEmail').value = '';
+                    document.getElementById('subPreference').value = '';
+                }
+            } catch (err) {
+                status.textContent = '❌ Something went wrong. Please try again.';
+                status.className = 'subscribe-status error';
+                console.error('Subscribe error:', err);
+            }
+
+            btn.disabled = false;
+            btn.textContent = 'Subscribe — It\'s Free';
+        }
+
+        // ============ RVJ AI CHAT ============
+        let rvjChatHistory = [];
+        let rvjChatOpen = false;
+        let rvjChatWelcomeShown = false;
+        let rvjCloseTime = 0;
+        const RVJ_TIMEOUT_MS = 10 * 60 * 1000;
+
+        const rvjGreetings = [
+            "Hi! How may I help you today?",
+            "Welcome to Remote Via Jobs! Ready to find your dream remote job?",
+            "Hello! I'm your career assistant. What can I help you with?",
+            "Hey there! Looking for remote work? Let's talk.",
+            "Welcome back! What's on your mind today?",
+            "Hi! I can help with your CV, interviews, and job search.",
+            "Hey! Ready to level up your remote career?",
+            "Hello! Let's find you a great remote job.",
+            "Welcome! Ask me anything about remote work.",
+            "Hi! Need help with your job search or CV?",
+            "Hey there! I'm RVJ AI — how can I help?",
+            "Hello! Let's build your remote career together.",
+            "Welcome! What can I help you with today?",
+            "Hi! I'm here to help with jobs, CVs, and interviews.",
+            "Hey! Ready to find your next remote opportunity?",
+            "Hello! What would you like help with?",
+            "Welcome to Remote Via Jobs! How can I assist?",
+            "Hi! Let's make your job search easier.",
+            "Hey! Ask me anything career-related.",
+            "Hello! I'm here 24/7 to help with your career.",
+            "Welcome! Ready to apply for your dream job?",
+            "Hi! What remote job are you looking for?",
+            "Hey there! Need CV tips or interview prep?",
+            "Hello! Let's get you hired.",
+            "Welcome! Your career journey starts here.",
+            "Hi! Ask me about jobs, skills, or courses.",
+            "Hey! I can help you grow your career. What do you need?",
+            "Hello! What's your next career goal?",
+            "Welcome! Let's find the right job for you.",
+            "Hi! I'm RVJ AI, your personal career assistant."
+        ];
+
+        function getRVJGreeting() {
+            return rvjGreetings[Math.floor(Math.random() * rvjGreetings.length)];
+        }
+
+        function toggleRVJChat() {
+            const win = document.getElementById('rvjChatWindow');
+            const now = Date.now();
+            if (win.classList.contains('active')) {
+                win.classList.remove('active');
+                rvjChatOpen = false;
+                rvjCloseTime = now;
+            } else {
+                win.classList.add('active');
+                rvjChatOpen = true;
+                if (rvjCloseTime && (now - rvjCloseTime) > RVJ_TIMEOUT_MS) {
+                    rvjChatHistory = [];
+                    rvjChatWelcomeShown = false;
+                    document.getElementById('rvjChatMessages').innerHTML = '';
+                }
+                if (!rvjChatWelcomeShown) {
+                    rvjChatWelcomeShown = true;
+                    showRVJWelcome();
+                }
+                setTimeout(() => document.getElementById('rvjChatInput').focus(), 200);
+            }
+        }
+
+        function showRVJWelcome() {
+            const container = document.getElementById('rvjChatMessages');
+            const greeting = getRVJGreeting();
+            container.innerHTML = `
+                <div class="rvj-ai-welcome">
+                    <div class="rvj-ai-welcome-icon">🤖</div>
+                    <div class="rvj-ai-welcome-text">${greeting}</div>
+                </div>
+                <div class="rvj-ai-quick">
+                    <button onclick="rvjQuickAsk('Help me find a job. Ask me about my skills and preferences first.')">💼 Find jobs</button>
+                    <button onclick="rvjQuickAsk('Give me interview tips')">🎤 Interview tips</button>
+                    <button onclick="rvjQuickAsk('What are ATS keywords and how do I use them?')">🔑 ATS keywords</button>
+                    <button onclick="rvjQuickAsk('How do I check my CV match for a job?')">✅ Check my match</button>
+                    <button onclick="rvjQuickAsk('What courses should I take to improve my career?')">📚 Course ideas</button>
+                    <button onclick="rvjQuickAsk('Tell me about your career blog and what articles you have.')">📖 Career blog</button>
+                    <button onclick="rvjQuickAsk('I need 24/7 support. Can you help me with my question?')">🆘 24/7 Support</button>
+                </div>
+            `;       
+        }
+
+        function rvjQuickAsk(question) {
+            document.getElementById('rvjChatInput').value = question;
+            sendRVJChat();
+        }
+
+        function rvjAddMsg(text, role) {
+            const container = document.getElementById('rvjChatMessages');
+            const welcome = container.querySelector('.rvj-ai-welcome');
+            const quick = container.querySelector('.rvj-ai-quick');
+            if (welcome) welcome.remove();
+            if (quick) quick.remove();
+            const msg = document.createElement('div');
+            msg.className = 'rvj-ai-msg ' + role;
+            msg.textContent = text;
+            container.appendChild(msg);
+            container.scrollTop = container.scrollHeight;
+            return msg;
+        }
+
+        function rvjAddTyping() {
+            const container = document.getElementById('rvjChatMessages');
+            const msg = document.createElement('div');
+            msg.className = 'rvj-ai-msg ai';
+            msg.innerHTML = '<div class="rvj-ai-typing"><span></span><span></span><span></span></div>';
+            container.appendChild(msg);
+            container.scrollTop = container.scrollHeight;
+            return msg;
+        }
+
+        async function sendRVJChat() {
+            const input = document.getElementById('rvjChatInput');
+            const btn = document.getElementById('rvjChatSendBtn');
+            const text = input.value.trim();
+            if (!text || btn.disabled) return;
+            rvjAddMsg(text, 'user');
+            rvjChatHistory.push({ role: 'user', content: text });
+            input.value = '';
+            btn.disabled = true;
+            const typing = rvjAddTyping();
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ messages: rvjChatHistory })
+                });
+                const data = await response.json();
+                typing.remove();
+                if (data.reply) {
+                    rvjAddMsg(data.reply, 'ai');
+                    rvjChatHistory.push({ role: 'assistant', content: data.reply });
+                } else {
+                    rvjAddMsg('Sorry, I had a problem. Please try again.', 'ai');
+                }
+            } catch (err) {
+                typing.remove();
+                rvjAddMsg('Sorry, I had a problem. Please try again.', 'ai');
+            }
+            btn.disabled = false;
+            input.focus();
+        }
+
+        fetchJobs();
+    </script>
+</body>
+</html>
