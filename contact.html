@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Remote Via Jobs</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background: #f8fafc; color: #1e293b; line-height: 1.7; }
+        .hero-small { background: linear-gradient(135deg, #0B3763 0%, #1e4b7a 100%); color: white; padding: 40px 20px 60px; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px; }
+        .hero-small-inner { max-width: 900px; margin: 0 auto; }
+        .back-link { color: #cbd5e1; text-decoration: none; font-size: 0.9rem; display: inline-block; margin-bottom: 20px; }
+        .back-link:hover { color: white; }
+        .hero-small h1 { font-size: 2.2rem; font-weight: 700; }
+        .hero-small p { color: #cbd5e1; margin-top: 8px; font-size: 0.95rem; }
+        .container { max-width: 900px; margin: -30px auto 60px; padding: 0 20px; position: relative; z-index: 2; }
+        .form-card { background: white; padding: 35px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 25px; }
+        .form-card h2 { color: #0B3763; font-size: 1.4rem; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+        .form-card .subtitle { font-size: 0.9rem; color: #64748b; margin-bottom: 20px; }
+        .form-card input, .form-card textarea { width: 100%; padding: 14px 18px; border: 1px solid #cbd5e1; border-radius: 12px; font-family: 'Inter', sans-serif; font-size: 0.95rem; margin-bottom: 15px; outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+        .form-card input:focus, .form-card textarea:focus { border-color: #0B3763; box-shadow: 0 0 0 3px rgba(0, 168, 255, 0.15); }
+        .form-card textarea { min-height: 130px; resize: vertical; }
+        .form-card button { background: #0B3763; color: white; border: none; padding: 14px 30px; border-radius: 12px; font-weight: 700; font-size: 1rem; cursor: pointer; font-family: 'Inter', sans-serif; width: 100%; transition: background 0.2s; }
+        .form-card button:hover { background: #00A8FF; }
+        footer { background: #0f172a; color: #94a3b8; padding: 40px 20px; text-align: center; font-size: 0.85rem; }
+        footer a { color: #94a3b8; text-decoration: none; margin: 0 10px; }
+        footer a:hover { color: white; }
+        @media (max-width: 600px) { .hero-small h1 { font-size: 1.6rem; } .form-card { padding: 25px; } }
+    </style>
+</head>
+<body>
+    <div class="hero-small">
+        <div class="hero-small-inner">
+            <a href="/" class="back-link">← Back to Jobs</a>
+            <h1>Contact Us</h1>
+            <p>We'd love to hear from you. Reach out for general inquiries or send us feedback.</p>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <!-- GENERAL INQUIRY FORM -->
+        <div class="form-card">
+            <h2>📧 General Inquiry</h2>
+            <p class="subtitle">Have a question? Send us a message and we'll reply within 24 hours.</p>
+            <form action="https://formsubmit.co/remoteviajobs@gmail.com" method="POST">
+                <input type="hidden" name="_subject" value="General Inquiry - Remote Via Jobs">
+                <input type="hidden" name="_template" value="table">
+                <input type="hidden" name="_captcha" value="true">
+                <input type="email" name="email" placeholder="Your email address" required>
+                <textarea name="message" placeholder="Type your message here..." required></textarea>
+                <button type="submit">Send Message</button>
+            </form>
+        </div>
+
+        <!-- FEEDBACK FORM -->
+        <div class="form-card">
+            <h2>💬 Feedback</h2>
+            <p class="subtitle">Help us improve. Tell us what you love or what we can do better.</p>
+            <form action="https://formsubmit.co/remoteviajobs@gmail.com" method="POST">
+                <input type="hidden" name="_subject" value="Feedback - Remote Via Jobs">
+                <input type="hidden" name="_template" value="table">
+                <input type="hidden" name="_captcha" value="true">
+                <input type="email" name="email" placeholder="Your email address" required>
+                <textarea name="feedback" placeholder="Type your feedback here..." required></textarea>
+                <button type="submit">Submit Feedback</button>
+            </form>
+        </div>
+
+    </div>
+
+    <footer>
+        <p style="margin-bottom: 15px;">© 2026 Remote Via Jobs. All rights reserved.</p>
+        <div>
+            <a href="/">Home</a>
+            <a href="/blog.html">Blog</a>
+            <a href="/about.html">About</a>
+            <a href="/privacy.html">Privacy</a>
+            <a href="/terms.html">Terms</a>
+        </div>
+    </footer>
+</body>
+</html>
