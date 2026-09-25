@@ -869,7 +869,7 @@ async function processFile(file) {
             input.focus();
         }
 
-        fetchJobs();
+        window.addEventListener('DOMContentLoaded', fetchJobs);
     </script>
 </body>
 </html>
