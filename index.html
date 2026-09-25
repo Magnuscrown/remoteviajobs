@@ -4,10 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Remote Via Jobs - Find Remote Jobs Worldwide</title>
+    <meta name="description" content="Find 150+ live remote jobs from trusted global platforms. Free CV match checker, 24/7 career chat, and daily job alerts. No signup required.">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Preconnect: speeds up external connections -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preconnect" href="https://xsuqoebwpuxnhjpjzysv.supabase.co" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Fonts: load async, don't block rendering -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"></noscript>
+
+    <!-- Supabase: needed for jobs, but defer so page renders first -->
+    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- PDF.js: only needed when user uploads a CV. Load it lazily (see JS below) -->
     <style>
         :root { --primary-color: #0B3763; --accent-color: #00A8FF; --bg-color: #f8fafc; --text-dark: #1e293b; --text-light: #64748b; --white: #ffffff; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -372,7 +386,7 @@
     </div>
 
     <script>
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        
 
         const SUPABASE_URL = 'https://xsuqoebwpuxnhjpjzysv.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhzdXFvZWJ3cHV4bmhqcGp6eXN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk1OTg4NjQsImV4cCI6MjEwNTE3NDg2NH0.fVRP2mQU_yExjbTvUJzbsHCTQnIa2JBUJcidozSIxCQ';
@@ -466,8 +480,30 @@
             await processFile(file);
         }
 
-        async function processFile(file) {
-            const status = document.getElementById('fileStatus');
+        async function loadPdfJs() {
+    if (window.pdfjsLib) return;
+    await new Promise((resolve, reject) => {
+        const s = document.createElement('script');
+        s.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+        s.onload = () => {
+            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+            resolve();
+        };
+        s.onerror = reject;
+        document.head.appendChild(s);
+    });
+}
+
+async function processFile(file) {
+    const status = document.getElementById('fileStatus');
+    status.classList.add('active');
+    status.style.color = '#3b82f6';
+    status.textContent = '📄 Reading file...';
+    try {
+        let text = '';
+        if (file.name.toLowerCase().endsWith('.pdf')) {
+            await loadPdfJs();
+            const arrayBuffer = await file.arrayBuffer();
             status.classList.add('active');
             status.style.color = '#3b82f6';
             status.textContent = '📄 Reading file...';
